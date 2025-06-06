@@ -1,34 +1,33 @@
 export const ORDER = {
-  consumerId: "clb0z1cmg0575bhmruuws7tun",
-  consumerName: "vladimir",
-  createdAt: "2025-06-04T07:43:23.193Z",
+  id: "68418150999ab37d8186d6d3",
+  additionalInfo: {
+    scheduleAt: null,
+    specialInstructions: "",
+  },
+  application: "POS",
+  consumerContactInfo: null,
+  consumerId: null,
+  consumerName: null,
+  deliveryInfo: null,
   employeeId: null,
   employeeName: null,
-  fee: 99,
-  id: "683ff913abc7c9f777a28513",
+  fee: 0,
   isOpenTab: false,
-  merchantId: "cl78yyrut89323lmrexxfoo9p",
-  multimerchantId: null,
-  referenceId: "683FF913UZVS",
-  type: "DINE_IN",
-  updatedAt: "2025-06-04T07:43:23.193Z",
-  application: "CONSUMER",
   items: [
     {
       acceptedKdsId: null,
-      amount: 3,
+      amount: 1,
       cashDiscount: 0,
-      chitName: "Lentils bolognese",
-      createdAt: "2025-06-04T07:43:23.192Z",
+      chitName: "capricciosa",
       delayedUntil: null,
+      dynamicPrice: null,
       externalItemId: null,
-      id: "683ff913abc7c9f777a28514",
-      itemKdsIds: ["clpr2tmxa13765anmphr1ebhlu"],
+      itemKdsIds: ["clsvopwi508fpmh38or7j1oti"],
       itemPrinterIds: [],
-      menuCategoryId: "cm1g7f7kc006v8gq7546k3lyy",
-      menuCategoryName: "House Specials",
-      menuId: "clpqw9gwc6734anmparkklvhr",
-      menuItemId: "cm1g7n7ix00718gq7tyrlt9di",
+      menuCategoryId: "clsvoi78r08awmh38rgnzmn3y",
+      menuCategoryName: "test",
+      menuId: "clsvoa6oh0858mh384pqttf0y",
+      menuItemId: "clsvp1dfl08g3mh38ylnf2dfp",
       modifiers: [
         {
           amount: 1,
@@ -71,16 +70,16 @@ export const ORDER = {
           price: 0,
         },
       ],
-      name: "Lentils bolognese",
+      name: "Capricciosa",
       note: "",
       orderedByConsumerId: null,
       orderedByConsumerName: null,
-      price: 500,
+      price: 1200,
       priceTieredName: "",
       revenueCenter: "Food",
       status: "PENDING",
-      tableKdsIds: ["clquyakay000wbn39zp5r356t"],
-      tableName: "novi sto",
+      tableKdsIds: ["clsvopwi508fpmh38or7j1oti", "clsvoq18w08frmh38dnnwasb3"],
+      tableName: "Table 1",
       tableOrderType: "Dine-in",
       tablePrinterIds: [],
       tableSection: "Main Dining",
@@ -88,43 +87,65 @@ export const ORDER = {
         {
           amount: 10,
           externalId: null,
-          id: "clpr2s8o313566anmpbeu6vg9q",
+          id: "clsvopcmp08flmh38hxp8yfnq",
           isInclusive: false,
           isRemoved: false,
-          name: "Food and Drink",
+          name: "Food",
           type: "PERCENTAGE",
         },
       ],
-      updatedAt: "2025-06-04T07:43:23.192Z",
       voidReason: null,
-      dynamicPrice: null,
+      id: "68418150999ab37d8186d6d4",
+      createdAt: "2025-06-05T11:36:48.909+0000",
+      updatedAt: "2025-06-05T11:36:48.909+0000",
     },
     {
       acceptedKdsId: null,
-      amount: 2,
+      amount: 1,
       cashDiscount: 0,
-      chitName: "Coconut chickpeas",
-      createdAt: "2025-06-04T07:43:23.193Z",
+      chitName: "hawaiian",
       delayedUntil: null,
+      dynamicPrice: null,
       externalItemId: null,
-      id: "683ff913abc7c9f777a28515",
-      itemKdsIds: ["clpr2tmxa13765anmphr1ebhlu"],
+      itemKdsIds: ["clsvopwi508fpmh38or7j1oti"],
       itemPrinterIds: [],
-      menuCategoryId: "cm1g7f7kc006v8gq7546k3lyy",
-      menuCategoryName: "House Specials",
-      menuId: "clpqw9gwc6734anmparkklvhr",
-      menuItemId: "cm1g7j229006z8gq7bt6o56ov",
-      modifiers: [],
-      name: "Coconut chickpeas",
+      menuCategoryId: "clsvoi78r08awmh38rgnzmn3y",
+      menuCategoryName: "Test",
+      menuId: "clsvoa6oh0858mh384pqttf0y",
+      menuItemId: "clsvoztya08g1mh38xrkqpgfc",
+      modifiers: [
+        {
+          amount: 1,
+          cashDiscount: 0,
+          chitName: "Chicken",
+          externalId: null,
+          groupExternalId: null,
+          groupName: "Special extras",
+          name: "Chicken",
+          price: 99,
+        },
+
+        {
+          amount: 1,
+          cashDiscount: 0,
+          chitName: "Mustard",
+          externalId: null,
+          groupExternalId: null,
+          groupName: "Pizza extras",
+          name: "Mustard",
+          price: 0,
+        },
+      ],
+      name: "Hawaiian",
       note: "",
       orderedByConsumerId: null,
       orderedByConsumerName: null,
-      price: 999,
+      price: 1300,
       priceTieredName: "",
       revenueCenter: "Food",
       status: "PENDING",
-      tableKdsIds: ["clquyakay000wbn39zp5r356t"],
-      tableName: "novi sto",
+      tableKdsIds: ["clsvopwi508fpmh38or7j1oti", "clsvoq18w08frmh38dnnwasb3"],
+      tableName: "Table 1",
       tableOrderType: "Dine-in",
       tablePrinterIds: [],
       tableSection: "Main Dining",
@@ -132,171 +153,248 @@ export const ORDER = {
         {
           amount: 10,
           externalId: null,
-          id: "clpr2s8o313566anmpbeu6vg9q",
+          id: "clsvopcmp08flmh38hxp8yfnq",
           isInclusive: false,
           isRemoved: false,
-          name: "Food and Drink",
+          name: "Food",
           type: "PERCENTAGE",
         },
       ],
-      updatedAt: "2025-06-04T07:43:23.193Z",
       voidReason: null,
-      dynamicPrice: null,
-    },
-    {
-      acceptedKdsId: null,
-      amount: 4,
-      cashDiscount: 0,
-      chitName: "Falafel bowl",
-      createdAt: "2025-06-04T07:43:23.193Z",
-      delayedUntil: null,
-      externalItemId: null,
-      id: "683ff913abc7c9f777a28516",
-      itemKdsIds: ["clpr2tmxa13765anmphr1ebhlu"],
-      itemPrinterIds: [],
-      menuCategoryId: "cm1g7f7kc006v8gq7546k3lyy",
-      menuCategoryName: "House Specials",
-      menuId: "clpqw9gwc6734anmparkklvhr",
-      menuItemId: "cm1g7gsdz006x8gq7sk69yo37",
-      modifiers: [],
-      name: "Falafel bowl",
-      note: "",
-      orderedByConsumerId: null,
-      orderedByConsumerName: null,
-      price: 1100,
-      priceTieredName: "",
-      revenueCenter: "Food",
-      status: "PENDING",
-      tableKdsIds: ["clquyakay000wbn39zp5r356t"],
-      tableName: "novi sto",
-      tableOrderType: "Dine-in",
-      tablePrinterIds: [],
-      tableSection: "Main Dining",
-      taxes: [
-        {
-          amount: 10,
-          externalId: null,
-          id: "cm7mep2ko00z5zizgefakt4tc",
-          isInclusive: true,
-          isRemoved: false,
-          name: "inclusive percentage",
-          type: "PERCENTAGE",
-        },
-      ],
-      updatedAt: "2025-06-04T07:43:23.193Z",
-      voidReason: null,
-      dynamicPrice: null,
+      id: "68418150999ab37d8186d6d5",
+      createdAt: "2025-06-05T11:36:48.910+0000",
+      updatedAt: "2025-06-05T11:36:48.910+0000",
     },
   ],
+  merchantId: "clsvoa6ha0852mh38yeuy4nc6",
+  multimerchantId: null,
+  referenceId: "68418150LBGD",
+  type: "DINE_IN",
+  createdAt: "2025-06-05T11:36:48.910+0000",
+  updatedAt: "2025-06-05T11:36:48.910+0000",
 };
-export const ORDER_CHECK = {
-  "id": "683ff913abc7c9f777a28517",
-  "checks": [
+
+export const ORDER_CHECKS = {
+  id: "68418150999ab37d8186d6d6",
+  checks: [
     {
-      "consumerId": "clb0z1cmg0575bhmruuws7tun",
-      "discounts": [
+      consumerId: "1",
+      discounts: [
         {
-          "amount": 200,
-          "id": "cly5wa7ds01zygebomibmdk6y",
-          "name": "Fixed amount off 200",
-          "type": "FIXED_AMOUNT_OFF"
+          amount: 200,
+          id: "cly5wa7ds01zygebomibmdk6y",
+          name: "Fixed amount off 200",
+          type: "FIXED_AMOUNT_OFF",
         },
         {
-          "amount": 10,
-          "id": "clx8ytk9f0001re77cs8gfi9x",
-          "name": "Fixed Percentage Off 10%",
-          "type": "FIXED_PERCENTAGE_OFF"
-        }
+          amount: 10,
+          id: "clx8ytk9f0001re77cs8gfi9x",
+          name: "Fixed Percentage Off 10",
+          type: "FIXED_PERCENTAGE_OFF",
+        },
       ],
-      "items": [
+      items: [
         {
-          "amount": 3,
-          "discounts": [
-            {
-              "amount": 200,
-              "id": "cly5wa7ds01zygebomibmdk6y",
-              "name": "Fixed amount off 200",
-              "type": "FIXED_AMOUNT_OFF"
-            },
-            {
-              "amount": 10,
-              "id": "clx8ytk9f0001re77cs8gfi9x",
-              "name": "Fixed Percentage Off 10",
-              "type": "FIXED_PERCENTAGE_OFF"
-            }
-          ],
-          "orderItemId": "683ff913abc7c9f777a28514",
-          "refundAmount": 0,
-          "refundFailedAmount": 0,
-          "voidAmount": 0,
-          "voidPaidAmount": 0,
-          "id": "683ff91babc7c9f777a2851f",
-          "createdAt": "2025-06-04T07:43:23.349+0000",
-          "updatedAt": "2025-06-04T07:43:23.349+0000"
+          amount: 1,
+          discounts: [],
+          orderItemId: "68418150999ab37d8186d6d4",
+          refundAmount: 0,
+          refundFailedAmount: 0,
+          voidAmount: 0,
+          voidPaidAmount: 0,
+          id: "68418150999ab37d8186d6df",
+          createdAt: "2025-06-05T11:36:48.921+0000",
+          updatedAt: "2025-06-05T11:36:48.921+0000",
         },
         {
-          "amount": 2,
-          "discounts": [
+          amount: 0.5,
+          discounts: [
             {
-              "amount": 200,
-              "id": "cly5wa7ds01zygebomibmdk6y",
-              "name": "Fixed amount off 200",
-              "type": "FIXED_AMOUNT_OFF"
+              amount: 200,
+              id: "cly5wa7ds01zygebomibmdk6y",
+              name: "Fixed amount off 200",
+              type: "FIXED_AMOUNT_OFF",
             },
             {
-              "amount": 10,
-              "id": "clx8ytk9f0001re77cs8gfi9x",
-              "name": "Fixed Percentage off 10",
-              "type": "FIXED_PERCENTAGE_OFF"
-            }
+              amount: 10,
+              id: "clx8ytk9f0001re77cs8gfi9x",
+              name: "Fixed Percentage Off 10",
+              type: "FIXED_PERCENTAGE_OFF",
+            },
           ],
-          "orderItemId": "683ff913abc7c9f777a28515",
-          "refundAmount": 0,
-          "refundFailedAmount": 0,
-          "voidAmount": 0,
-          "voidPaidAmount": 0,
-          "id": "683ff91babc7c9f777a28520",
-          "createdAt": "2025-06-04T07:43:23.350+0000",
-          "updatedAt": "2025-06-04T07:43:23.350+0000"
+          orderItemId: "68418150999ab37d8186d6d5",
+          refundAmount: 0,
+          refundFailedAmount: 0,
+          voidAmount: 0,
+          voidPaidAmount: 0,
+          id: "68418150999ab37d8186d6e0",
+          createdAt: "2025-06-05T11:36:48.921+0000",
+          updatedAt: "2025-06-05T11:36:48.921+0000",
         },
-        {
-          "amount": 4,
-          "discounts": [
-            {
-              "amount": 200,
-              "id": "cly5wa7ds01zygebomibmdk6y",
-              "name": "Fixed amount off 200",
-              "type": "FIXED_AMOUNT_OFF"
-            },
-            {
-              "amount": 10,
-              "id": "clx8ytk9f0001re77cs8gfi9x",
-              "name": "Fixed Percentage off 10%",
-              "type": "FIXED_PERCENTAGE_OFF"
-            }
-          ],
-          "orderItemId": "683ff913abc7c9f777a28516",
-          "refundAmount": 0,
-          "refundFailedAmount": 0,
-          "voidAmount": 0,
-          "voidPaidAmount": 0,
-          "id": "683ff91babc7c9f777a28521",
-          "createdAt": "2025-06-04T07:43:23.350+0000",
-          "updatedAt": "2025-06-04T07:43:23.350+0000"
-        }
       ],
-      "paymentProvider": "CLOVER",
-      "paymentStatus": "NONE",
-      "paymentTransactions": [],
-      "referenceId": "683FF913VEGW",
-      "tip": 100,
-      "id": "683ff91babc7c9f777a2851e",
-      "createdAt": "2025-06-04T07:43:23.350+0000",
-      "updatedAt": "2025-06-04T07:43:23.350+0000"
-    }
+      paymentProvider: "PAYRIX",
+      paymentStatus: "NONE",
+      paymentTransactions: [],
+      referenceId: "68418150SYUJ",
+      tip: null,
+      id: "68418150999ab37d8186d6de",
+      createdAt: "2025-06-05T11:36:48.921+0000",
+      updatedAt: "2025-06-05T11:36:48.921+0000",
+    },
+    {
+      consumerId: "2",
+      discounts: [
+        {
+          amount: 200,
+          id: "cly5wa7ds01zygebomibmdk6y",
+          name: "Fixed amount off 200",
+          type: "FIXED_AMOUNT_OFF",
+        },
+        {
+          amount: 10,
+          id: "clx8ytk9f0001re77cs8gfi9x",
+          name: "Fixed Percentage Off 10",
+          type: "FIXED_PERCENTAGE_OFF",
+        },
+      ],
+      items: [
+        {
+          amount: 0.5,
+          discounts: [],
+          orderItemId: "68418150999ab37d8186d6d5",
+          refundAmount: 0,
+          refundFailedAmount: 0,
+          voidAmount: 0,
+          voidPaidAmount: 0,
+          id: "68418150999ab37d8186d6e2",
+          createdAt: "2025-06-05T11:36:48.921+0000",
+          updatedAt: "2025-06-05T11:36:48.921+0000",
+        },
+      ],
+      paymentProvider: "PAYRIX",
+      paymentStatus: "NONE",
+      paymentTransactions: [],
+      referenceId: "68418150QLNM",
+      tip: null,
+      id: "68418150999ab37d8186d6e1",
+      createdAt: "2025-06-05T11:36:48.921+0000",
+      updatedAt: "2025-06-05T11:36:48.921+0000",
+    },
   ],
-  "merchantId": "cl78yyrut89323lmrexxfoo9p",
-  "orderId": "683ff913abc7c9f777a28513",
-  "createdAt": "2025-06-04T07:43:23.350+0000",
-  "updatedAt": "2025-06-04T07:43:23.350+0000"
-}
+  merchantId: "clsvoa6ha0852mh38yeuy4nc6",
+  orderId: "68418150999ab37d8186d6d3",
+  createdAt: "2025-06-05T11:36:48.921+0000",
+  updatedAt: "2025-06-05T11:36:48.921+0000",
+};
+
+// export const ORDER_CHECK = {
+//   "id": "683ff913abc7c9f777a28517",
+//   "checks": [
+//     {
+//       "consumerId": "clb0z1cmg0575bhmruuws7tun",
+//       "discounts": [
+//         {
+//           "amount": 200,
+//           "id": "cly5wa7ds01zygebomibmdk6y",
+//           "name": "Fixed amount off 200",
+//           "type": "FIXED_AMOUNT_OFF"
+//         },
+//         {
+//           "amount": 10,
+//           "id": "clx8ytk9f0001re77cs8gfi9x",
+//           "name": "Fixed Percentage Off 10%",
+//           "type": "FIXED_PERCENTAGE_OFF"
+//         }
+//       ],
+//       "items": [
+//         {
+//           "amount": 3,
+//           "discounts": [
+//             {
+//               "amount": 200,
+//               "id": "cly5wa7ds01zygebomibmdk6y",
+//               "name": "Fixed amount off 200",
+//               "type": "FIXED_AMOUNT_OFF"
+//             },
+//             {
+//               "amount": 10,
+//               "id": "clx8ytk9f0001re77cs8gfi9x",
+//               "name": "Fixed Percentage Off 10",
+//               "type": "FIXED_PERCENTAGE_OFF"
+//             }
+//           ],
+//           "orderItemId": "683ff913abc7c9f777a28514",
+//           "refundAmount": 0,
+//           "refundFailedAmount": 0,
+//           "voidAmount": 0,
+//           "voidPaidAmount": 0,
+//           "id": "683ff91babc7c9f777a2851f",
+//           "createdAt": "2025-06-04T07:43:23.349+0000",
+//           "updatedAt": "2025-06-04T07:43:23.349+0000"
+//         },
+//         {
+//           "amount": 2,
+//           "discounts": [
+//             {
+//               "amount": 200,
+//               "id": "cly5wa7ds01zygebomibmdk6y",
+//               "name": "Fixed amount off 200",
+//               "type": "FIXED_AMOUNT_OFF"
+//             },
+//             {
+//               "amount": 10,
+//               "id": "clx8ytk9f0001re77cs8gfi9x",
+//               "name": "Fixed Percentage off 10",
+//               "type": "FIXED_PERCENTAGE_OFF"
+//             }
+//           ],
+//           "orderItemId": "683ff913abc7c9f777a28515",
+//           "refundAmount": 0,
+//           "refundFailedAmount": 0,
+//           "voidAmount": 0,
+//           "voidPaidAmount": 0,
+//           "id": "683ff91babc7c9f777a28520",
+//           "createdAt": "2025-06-04T07:43:23.350+0000",
+//           "updatedAt": "2025-06-04T07:43:23.350+0000"
+//         },
+//         {
+//           "amount": 4,
+//           "discounts": [
+//             {
+//               "amount": 200,
+//               "id": "cly5wa7ds01zygebomibmdk6y",
+//               "name": "Fixed amount off 200",
+//               "type": "FIXED_AMOUNT_OFF"
+//             },
+//             {
+//               "amount": 10,
+//               "id": "clx8ytk9f0001re77cs8gfi9x",
+//               "name": "Fixed Percentage off 10%",
+//               "type": "FIXED_PERCENTAGE_OFF"
+//             }
+//           ],
+//           "orderItemId": "683ff913abc7c9f777a28516",
+//           "refundAmount": 0,
+//           "refundFailedAmount": 0,
+//           "voidAmount": 0,
+//           "voidPaidAmount": 0,
+//           "id": "683ff91babc7c9f777a28521",
+//           "createdAt": "2025-06-04T07:43:23.350+0000",
+//           "updatedAt": "2025-06-04T07:43:23.350+0000"
+//         }
+//       ],
+//       "paymentProvider": "CLOVER",
+//       "paymentStatus": "NONE",
+//       "paymentTransactions": [],
+//       "referenceId": "683FF913VEGW",
+//       "tip": 100,
+//       "id": "683ff91babc7c9f777a2851e",
+//       "createdAt": "2025-06-04T07:43:23.350+0000",
+//       "updatedAt": "2025-06-04T07:43:23.350+0000"
+//     }
+//   ],
+//   "merchantId": "cl78yyrut89323lmrexxfoo9p",
+//   "orderId": "683ff913abc7c9f777a28513",
+//   "createdAt": "2025-06-04T07:43:23.350+0000",
+//   "updatedAt": "2025-06-04T07:43:23.350+0000"
+// }

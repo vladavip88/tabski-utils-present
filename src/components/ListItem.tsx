@@ -25,24 +25,35 @@ const ListItem: FC<ListItemProps> = ({
   };
 
   const textColor = getTextColor();
+  const labelOnly = !amount && !unitPrice && !value;
 
   return (
     <li className="flex justify-end gap-x-6 py-1 hover:bg-blue-100">
       <p className={`text-sm/6 font-semibold ${textColor} mr-auto`}>{label}</p>
 
-      <p className={`text-sm/6 font-semibold ${textColor} text-right w-[50px]`}>
-        {amount}
-      </p>
+      {!labelOnly && (
+        <>
+          <p
+            className={`text-sm/6 font-semibold ${textColor} text-right w-[50px]`}
+          >
+            {amount}
+          </p>
 
-      <p className={`text-sm/6 font-semibold ${textColor} text-right w-[50px]`}>
-        {unitPrice}
-      </p>
+          <p
+            className={`text-sm/6 font-semibold ${textColor} text-right w-[50px]`}
+          >
+            {unitPrice}
+          </p>
 
-      <p
-        className={`${textColor} text-right ${info ? "w-[250px]" : "w-[50px]"}`}
-      >
-        {value}
-      </p>
+          <p
+            className={`${textColor} text-right ${
+              info ? "w-[250px]" : "w-[50px]"
+            }`}
+          >
+            {value}
+          </p>
+        </>
+      )}
     </li>
   );
 };

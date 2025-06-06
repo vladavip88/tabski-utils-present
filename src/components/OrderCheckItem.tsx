@@ -18,7 +18,7 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
   orderCheck,
   showInfo,
 }) => {
-  const checkItems = orderCheck.checks[0].items;
+  const checkItems = orderCheck.items;
 
   return (
     <>
@@ -30,17 +30,7 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
         return (
           <div key={item.id} className="mb-4">
             <ul role="list" className="divide-y divide-gray-300 bg-gray-50 p-2">
-              <ListItem label="ORDER CHECK ITEM INFO" />
-              {showInfo && (
-                <>
-                  <ListItem
-                    info
-                    label="Order Item ID"
-                    value={item.orderItemId}
-                  />
-                  <ListItem info label="Order Check Item ID" value={item.id} />
-                </>
-              )}
+              <ListItem label={`ORDER CHECK ITEM INFO (${item.orderItemId})`} />
 
               <ListItem
                 label={orderItem.name}

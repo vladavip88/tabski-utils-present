@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { ORDER, ORDER_CHECK } from "./mockData";
+import { ORDER, ORDER_CHECKS } from "./mockData";
 
 import JsonEditor from "./components/JsonEditor";
 import Button from "./components/Button";
@@ -14,7 +14,7 @@ function App() {
   const [parsedOrder, setParsedOrder] = useState(ORDER);
   const [orderError, setOrderError] = useState("");
   const [orderCheck, setOrderCheck] = useState("");
-  const [parsedOrderChecks, setParsedOrderChecks] = useState(ORDER_CHECK);
+  const [parsedOrderChecks, setParsedOrderChecks] = useState(ORDER_CHECKS);
   const [orderCheckError, setOrderCheckError] = useState("");
 
   const handleUpdate = () => {
@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     setOrder(JSON.stringify(ORDER, null, 2));
-    setOrderCheck(JSON.stringify(ORDER_CHECK, null, 2));
+    setOrderCheck(JSON.stringify(ORDER_CHECKS, null, 2));
   }, []);
 
   const toggleShowInfo = () => setShowInfo((prev) => !prev);
@@ -71,17 +71,23 @@ function App() {
           !orderError &&
           !orderCheckError && (
             <>
-              <h5 className="text-xl font-bold  mb-4">UI </h5>
+              <h5 className="text-xl font-bold">UI </h5>
 
-              <OrderCheckItem
-                order={parsedOrder}
-                orderCheck={parsedOrderChecks}
-                showInfo={showInfo}
-              />
-              <OrderCheckSummary
-                order={parsedOrder}
-                orderCheck={parsedOrderChecks}
-              />
+              {parsedOrderChecks.checks?.map((check) => (
+                <>
+                <h5 className="text-xl font-bold  my-4">ORDER CHECK ({check.id})</h5>
+                  <OrderCheckItem
+                    order={parsedOrder}
+                    orderCheck={check}
+                    showInfo={showInfo}
+                  />
+                  <OrderCheckSummary
+                    order={parsedOrder}
+                    orderCheck={check}
+                  />
+                  <hr className="border-gray-800 border-2 mt-4" />
+                </>
+              ))}
               <OrderChecksSummary
                 order={parsedOrder}
                 orderChecks={parsedOrderChecks.checks}
