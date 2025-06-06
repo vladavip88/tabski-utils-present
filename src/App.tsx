@@ -12,6 +12,13 @@ import {
   calculateOrderCheckSubtotalPriceUI,
   calculateOrderCheckTaxesUI,
   calculateOrderCheckDiscountsHashMapUI,
+  calculateOrderCheckTotalPriceUI,
+  calculateOrderCheckDiscountsUI,
+  calculateOrderCheckItemDiscountsHashMapUI,
+  calculateOrderChecksSubtotalPriceUI,
+  calculateOrderChecksTotalTaxesUI,
+  calculateOrderChecksTotalDiscountsUI,
+  calculateOrderChecksTotalPriceUI,
 } from "@tabski-organization/tabski-utils";
 
 const highlight = (code: string) =>
@@ -230,7 +237,20 @@ const ORDER_CHECK = {
       items: [
         {
           amount: 3,
-          discounts: [],
+          discounts: [
+            {
+              amount: 200,
+              id: "cly5wa7ds01zygebomibmdk6y",
+              name: "test 123123",
+              type: "FIXED_AMOUNT_OFF",
+            },
+            {
+              amount: 10,
+              id: "clx8ytk9f0001re77cs8gfi9x",
+              name: "vlada test",
+              type: "FIXED_PERCENTAGE_OFF",
+            },
+          ],
           orderItemId: "683ff913abc7c9f777a28514",
           refundAmount: 0,
           refundFailedAmount: 0,
@@ -242,7 +262,20 @@ const ORDER_CHECK = {
         },
         {
           amount: 2,
-          discounts: [],
+          discounts: [
+            {
+              amount: 200,
+              id: "cly5wa7ds01zygebomibmdk6y",
+              name: "test 123123",
+              type: "FIXED_AMOUNT_OFF",
+            },
+            {
+              amount: 10,
+              id: "clx8ytk9f0001re77cs8gfi9x",
+              name: "vlada test",
+              type: "FIXED_PERCENTAGE_OFF",
+            },
+          ],
           orderItemId: "683ff913abc7c9f777a28515",
           refundAmount: 0,
           refundFailedAmount: 0,
@@ -254,7 +287,20 @@ const ORDER_CHECK = {
         },
         {
           amount: 4,
-          discounts: [],
+          discounts: [
+            {
+              amount: 200,
+              id: "cly5wa7ds01zygebomibmdk6y",
+              name: "test 123123",
+              type: "FIXED_AMOUNT_OFF",
+            },
+            {
+              amount: 10,
+              id: "clx8ytk9f0001re77cs8gfi9x",
+              name: "vlada test",
+              type: "FIXED_PERCENTAGE_OFF",
+            },
+          ],
           orderItemId: "683ff913abc7c9f777a28516",
           refundAmount: 0,
           refundFailedAmount: 0,
@@ -281,14 +327,30 @@ const ORDER_CHECK = {
   updatedAt: "2025-06-04T07:43:23.350+0000",
 };
 
-const ListItem = ({ label, value }) => (
-  <li className="flex justify-between gap-x-6 py-1 hover:bg-blue-100">
-    <p className="text-sm/6 font-semibold text-gray-900">{label}</p>
-    <p className="text-gray-500">{value}</p>
+const ListItem = ({ label, amount, value, marked }) => (
+  <li className="flex justify-end gap-x-6 py-1 hover:bg-blue-100">
+    <p className="text-sm/6 font-semibold text-gray-900 mr-auto">{label}</p>
+    {amount && (
+      <p
+        className={`text-sm/6 font-semibold ${
+          marked ? "text-red-500" : "text-gray-900 w-[50px]"
+        } text-right`}
+      >
+        {amount}
+      </p>
+    )}
+    <p
+      className={`${
+        marked ? "text-red-500" : "text-gray-900 w-[50px]"
+      } w-[250px] text-right`}
+    >
+      {value}
+    </p>
   </li>
 );
 
 function App() {
+  const [showIds, setShowIds] = useState(false);
   const [order, setOrder] = useState(JSON.stringify(ORDER, null, 2));
   const [parsedOrder, setParsedOrder] = useState(null);
   const [orderError, setOrderError] = useState("");
@@ -314,6 +376,10 @@ function App() {
       if (type === "order") setOrderError(`${type} is not valid JSON`);
       else setOrderCheckError(`${type} is not valid JSON`);
     }
+  };
+
+  const handleOnToggleShowIds = () => {
+    setShowIds((prev) => !prev);
   };
 
   useEffect(() => {
@@ -365,114 +431,152 @@ function App() {
           parsedOrderChecks &&
           !orderError &&
           !orderCheckError && (
-            <div>
+            <>
+              <div>
+                <button
+                  onClick={handleOnToggleShowIds}
+                  type="button"
+                  className="rounded-sm bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  {showIds ? "Hide IDs" : "Show IDs"}
+                </button>
+
+                {parsedOrderChecks.checks[0].items.map((item) => {
+                  const orderItem = parsedOrder.items.find(
+                    (i) => i.id === item.orderItemId
+                  );
+
+                  return (
+                    <div key={item.id} className="mb-4">
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-300 bg-gray-50 p-2"
+                      >
+                        {showIds && (
+                          <>
+                            <ListItem
+                              label="Order Item ID"
+                              value={item.orderItemId}
+                            />
+                            <ListItem
+                              label="Order Check Item ID"
+                              value={item.id}
+                            />
+                          </>
+                        )}
+                        <ListItem
+                          label={orderItem.name}
+                          amount={item.amount}
+                          value={calculateOrderCheckItemBasePriceUI({
+                            orderCheckItem: item,
+                            orderItem,
+                          })}
+                        />
+                        {orderItem.modifiers.map((modifier) => (
+                          <ListItem
+                            key={modifier.name}
+                            label={`Modifier: ${modifier.name}`}
+                            amount={modifier.amount}
+                            value={modifier.price * (modifier.amount || 1)}
+                          />
+                        ))}
+
+                        {calculateOrderCheckItemDiscountsHashMapUI({
+                          orderCheckItem: item,
+                          orderItems: parsedOrder.items,
+                        }).map((discount) => (
+                          <ListItem
+                            key={discount.id}
+                            marked
+                            label={`Discount: ${discount.name}`}
+                            value={discount.price}
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+              <div>
+                <hr className="border-gray-800 border-2 mb-4" />
+                <ul
+                  role="list"
+                  className="divide-y divide-gray-300 bg-gray-50 p-2"
+                >
+                  <ListItem
+                    label="Order check subtotal"
+                    value={calculateOrderCheckSubtotalPriceUI({
+                      orderCheckItems: parsedOrderChecks.checks[0].items,
+                      orderItems: parsedOrder.items,
+                    })}
+                  />
+                  {calculateOrderCheckDiscountsHashMapUI({
+                    orderCheck: parsedOrderChecks.checks[0],
+                    orderItems: parsedOrder.items,
+                  }).map((discount) => (
+                    <ListItem
+                      key={discount.id}
+                      marked
+                      label={`Order check discount: ${discount.name}`}
+                      value={discount.price}
+                    />
+                  ))}
+
+                  <ListItem
+                    label="Order check texes"
+                    value={calculateOrderCheckTaxesUI({
+                      orderCheck: parsedOrderChecks.checks[0],
+                      orderItems: parsedOrder.items,
+                    })}
+                  />
+                  <ListItem
+                    label="Order check tip"
+                    value={parsedOrderChecks.checks[0].tip}
+                  />
+                  <ListItem
+                    label="Order check total"
+                    value={calculateOrderCheckTotalPriceUI({
+                      orderCheck: parsedOrderChecks.checks[0],
+                      order: parsedOrder,
+                    })}
+                  />
+                </ul>
+              </div>
+              <hr className="border-gray-800 border-2 mb-4" />
               <ul
                 role="list"
-                className="divide-y divide-gray-300 bg-gray-50 p-2 mb-4"
+                className="divide-y divide-gray-300 bg-gray-50 p-2"
               >
                 <ListItem
-                  label="Order check subtotal"
-                  value={calculateOrderCheckSubtotalPriceUI({
-                    orderCheckItems: parsedOrderChecks.checks[0].items,
-                    orderItems: parsedOrder.items,
+                  label="Order Checks Subtotal"
+                  value={calculateOrderChecksSubtotalPriceUI({
+                    orderChecks: parsedOrderChecks.checks,
+                    order: parsedOrder,
                   })}
                 />
                 <ListItem
-                  label="Order check texes"
-                  value={calculateOrderCheckTaxesUI({
-                    orderCheck: parsedOrderChecks.checks[0],
-                    orderItems: parsedOrder.items,
+                  label="Order Checks Total Discounts"
+                  value={calculateOrderChecksTotalDiscountsUI({
+                    orderChecks: parsedOrderChecks.checks,
+                    order: parsedOrder,
                   })}
                 />
-                {/* <ListItem
-                  label="Order check discounts"
-                  value={calculateOrderCheckDiscountsUI({
-                    orderCheck: parsedOrderChecks.checks[0],
-                    orderItems: parsedOrder.items,
-                  })}
-                /> */}
                 <ListItem
-                  label="Order check discounts hash map"
-                  value={calculateOrderCheckDiscountsHashMapUI({
-                    orderCheck: parsedOrderChecks.checks[0],
-                    orderItems: parsedOrder.items,
-                  })
-                    .map((discount) => `${discount.name}: ${discount.price}`)
-                    .join(", ")}
+                  label="Order Checks Total Taxes"
+                  value={calculateOrderChecksTotalTaxesUI({
+                    orderChecks: parsedOrderChecks.checks,
+                    order: parsedOrder,
+                  })}
                 />
                 <ListItem
-                  label="Order check tip"
-                  value={parsedOrderChecks.checks[0].tip}
+                  label="Order Checks Total"
+                  value={calculateOrderChecksTotalPriceUI({
+                    orderChecks: parsedOrderChecks.checks,
+                    order: parsedOrder,
+                  })}
                 />
               </ul>
-              {parsedOrderChecks.checks[0].items.map((item) => {
-                const orderItem = parsedOrder.items.find(
-                  (i) => i.id === item.orderItemId
-                );
-
-                return (
-                  <div key={item.id} className="mb-4">
-                    <ul
-                      role="list"
-                      className="divide-y divide-gray-300 bg-gray-50 p-2"
-                    >
-                      <ListItem
-                        label="Order Item ID"
-                        value={item.orderItemId}
-                      />
-                      <ListItem label="Order Check Item ID" value={item.id} />
-                      <ListItem
-                        label="Base Price (amount included, modifiers not included)"
-                        value={calculateOrderCheckItemBasePriceUI({
-                          orderCheckItem: item,
-                          orderItem,
-                        })}
-                      />
-                      <ListItem
-                        label="Modifiers Price"
-                        value={orderItem.modifiers.reduce(
-                          (acc, curr) =>
-                            acc +
-                            (curr.price * curr.amount || 1) * orderItem.amount,
-                          0
-                        )}
-                      />
-
-                      <ListItem
-                        label="Taxes"
-                        value={calculateOrderCheckItemTaxesUI({
-                          orderCheckItem: item,
-                          orderItem,
-                        })}
-                      />
-
-                      <ListItem
-                        label="Total"
-                        value={calculateOrderCheckItemTotalPriceUI({
-                          orderCheckItem: item,
-                          orderItem,
-                        })}
-                      />
-
-                      <ListItem
-                        label="Refunded Price"
-                        value={calculateOrderCheckItemRefundedPriceUI({
-                          orderCheckItem: item,
-                          orderItem,
-                        })}
-                      />
-                      <ListItem
-                        label="Voided Price"
-                        value={calculateOrderCheckItemVoidedPriceUI({
-                          orderCheckItem: item,
-                          orderItem,
-                        })}
-                      />
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
+            </>
           )}
       </div>
     </div>
