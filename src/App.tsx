@@ -8,7 +8,6 @@ import OrderCheckItem from "./components/OrderCheckItem";
 import OrderCheckSummary from "./components/OrderCheckSummary";
 import OrderChecksSummary from "./components/OrderChecksSummary";
 
-
 function App() {
   const [showInfo, setShowInfo] = useState(false);
   const [order, setOrder] = useState("");
@@ -72,20 +71,17 @@ function App() {
           !orderError &&
           !orderCheckError && (
             <>
-              <h5 className="text-xl font-bold">UI </h5>
-
               {parsedOrderChecks.checks?.map((check) => (
                 <>
-                <h5 className="text-xl font-bold  my-4">ORDER CHECK ({check.id})</h5>
+                  <h5 className="text-xl font-bold  my-4">
+                    ORDER CHECK ({check.id})
+                  </h5>
                   <OrderCheckItem
                     order={parsedOrder}
                     orderCheck={check}
                     showInfo={showInfo}
                   />
-                  <OrderCheckSummary
-                    order={parsedOrder}
-                    orderCheck={check}
-                  />
+                  <OrderCheckSummary order={parsedOrder} orderCheck={check} />
                   <hr className="border-gray-800 border-2 mt-4" />
                 </>
               ))}
@@ -96,7 +92,6 @@ function App() {
             </>
           )}
       </div>
-     
     </div>
   );
 }
