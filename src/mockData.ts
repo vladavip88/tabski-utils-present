@@ -154,7 +154,7 @@ export const ORDER = {
           amount: 10,
           externalId: null,
           id: "clsvopcmp08flmh38hxp8yfnq",
-          isInclusive: false,
+          isInclusive: true,
           isRemoved: false,
           name: "Food",
           type: "PERCENTAGE",

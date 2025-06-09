@@ -7,6 +7,8 @@ import {
   calculateOrderCheckItemTotalPriceUI,
 } from "@tabski-organization/tabski-utils";
 
+import { calculateOrderCheckItemInclusiveTaxApi, calculateOrderCheckItemBasePriceApi, calculateOrderCheckItemChargeBasePriceApi } from "../library/calculations/api/orderCalculations";
+
 interface OrderCheckItemProps {
   order: any;
   orderCheck: any;
@@ -48,7 +50,7 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                   label={`Modifier: ${mod.name}`}
                   amount={mod.amount}
                   unitPrice={mod.price}
-                  value={mod.price * (mod.amount || 1) * orderItem.amount}
+                  value={Math.ceil(mod.price * (mod.amount || 1) * item.amount)}
                 />
               ))}
 
@@ -58,7 +60,7 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                   label="Modifiers Total Price"
                   value={orderItem.modifiers.reduce(
                     (acc: number, mod: any) =>
-                      acc + mod.price * (mod.amount || 1) * orderItem.amount,
+                      acc + Math.ceil(mod.price * (mod.amount || 1) * item.amount),
                     0
                   )}
                 />
@@ -80,16 +82,38 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                 <>
                   <ListItem
                     info
-                    label="Taxes"
-                    value={calculateOrderCheckItemTaxesUI({
+                    label="Total (without taxes)"
+                    value={calculateOrderCheckItemTotalPriceUI({
                       orderItem,
                       orderCheckItem: item,
                     })}
                   />
+                
+                  <ListItem
+                  info
+                    label="Charge Base Price (API)"
+                    value={calculateOrderCheckItemChargeBasePriceApi({
+                      orderItem,
+                      orderCheckItem: item,
+                    })}
+                  />
+
                   <ListItem
                     info
-                    label="Total (without taxes)"
-                    value={calculateOrderCheckItemTotalPriceUI({
+                    label="Taxes (inclusive)"
+                    value={calculateOrderCheckItemInclusiveTaxApi({
+                      orderCheckItemBasePrice:  calculateOrderCheckItemBasePriceApi({
+                        orderItem,
+                        orderCheckItem: item,
+                      }),
+                      orderItemTaxes: orderItem.taxes || [],
+                    })}
+                  />
+                  
+                  <ListItem
+                    info
+                    label="Taxes (exclusive)"
+                    value={calculateOrderCheckItemTaxesUI({
                       orderItem,
                       orderCheckItem: item,
                     })}

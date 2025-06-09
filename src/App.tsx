@@ -8,6 +8,7 @@ import OrderCheckItem from "./components/OrderCheckItem";
 import OrderCheckSummary from "./components/OrderCheckSummary";
 import OrderChecksSummary from "./components/OrderChecksSummary";
 
+
 function App() {
   const [showInfo, setShowInfo] = useState(false);
   const [order, setOrder] = useState("");
@@ -44,7 +45,7 @@ function App() {
 
   return (
     <div className="flex w-full min-h-screen">
-      <div className="w-[33.3%] p-4 bg-gray-100">
+      <div className="w-[50%] p-4 bg-gray-100">
         <JsonEditor
           label="Order Input"
           value={order}
@@ -65,7 +66,7 @@ function App() {
         </div>
       </div>
 
-      <div className="w-[33.3%] p-4 bg-white">
+      <div className="w-[50%] p-4 bg-white">
         {parsedOrder &&
           parsedOrderChecks &&
           !orderError &&
@@ -95,9 +96,7 @@ function App() {
             </>
           )}
       </div>
-      <div className="w-[33.3%] p-4 bg-white">
-        <h5 className="text-xl font-bold  mb-4">API </h5>
-      </div>
+     
     </div>
   );
 }
