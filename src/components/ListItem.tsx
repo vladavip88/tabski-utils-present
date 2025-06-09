@@ -7,6 +7,7 @@ interface ListItemProps {
   value: string | number | ReactNode;
   unitPrice?: number | string;
   marked?: boolean;
+  refund?: boolean;
   info?: boolean;
 }
 
@@ -14,6 +15,7 @@ const ListItem: FC<ListItemProps> = ({
   label,
   amount,
   value,
+  refund,
   marked = false,
   info = false,
   unitPrice,
@@ -21,6 +23,7 @@ const ListItem: FC<ListItemProps> = ({
   const getTextColor = (): string => {
     if (marked) return "text-red-500";
     if (info) return "text-blue-500";
+    if (refund) return "text-orange-500";
     return "text-gray-900";
   };
 

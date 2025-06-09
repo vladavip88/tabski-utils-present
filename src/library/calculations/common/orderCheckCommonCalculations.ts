@@ -2,8 +2,9 @@ import type {
   OrderItem_V2,
   OrderCheckDiscount_V2,
   OrderCheckItem_V2,
+  OrderItemTaxes_V2,
 } from "../../types/graphql";
-import { OrderChecksDiscountTypes_V2 } from "../../types/graphql";
+import { OrderChecksDiscountTypes_V2, TaxType } from "../../types/graphql";
 
 import { validateDiscount } from "../../common/validations";
 import { isNumber } from "../../common/commonUtils";
@@ -202,3 +203,99 @@ export const applyOrderCheckDiscountOnExistingCheckItems: ApplyOrderCheckDiscoun
 
     return updatedCheckItems;
   };
+
+// ====================================== //
+// === CALCULATE ORDER ITEM TAX PRICE === //
+// ====================================== //
+interface CalculateOrderItemTaxPriceParams {
+  orderItemSubtotal: number;
+  tax: Partial<OrderItemTaxes_V2>;
+}
+
+type CalculateOrderItemTaxPrice = (
+  params: CalculateOrderItemTaxPriceParams
+) => number;
+export const calculateOrderItemTaxPrice: CalculateOrderItemTaxPrice = ({
+  orderItemSubtotal,
+  tax,
+}) => {
+  const { type, amount, isInclusive, isRemoved } = tax;
+
+  if (isRemoved || isInclusive) return 0;
+
+  if (!type) throw new Error("Tax type is missing");
+
+  if (!isNumber(amount)) throw new Error("Tax amount is missing");
+
+  if (type === TaxType.Percentage) {
+    return orderItemSubtotal * (amount / 100);
+  }
+
+  if (type === TaxType.Flat) {
+    // Flat tax is the same whether inclusive or exclusive
+    return amount;
+  }
+
+  throw new Error(`Unknown tax type: ${type}`);
+};
+
+// ========================================= //
+// === CALCULATE ORDER CHECK ITEM TAXES  === //
+// ========================================= //
+interface CalculateOrderCheckItemTaxesParams {
+  orderItem: Partial<OrderItem_V2>;
+  orderCheckItem: Partial<OrderCheckItem_V2>;
+}
+
+type CalculateOrderCheckItemTaxes = (
+  params: CalculateOrderCheckItemTaxesParams
+) => number;
+
+export const calculateOrderCheckItemTaxes: CalculateOrderCheckItemTaxes = ({
+  orderItem,
+  orderCheckItem,
+}) => {
+  const taxes = orderItem.taxes || [];
+  const exclusiveTaxes = taxes.filter((tax) => !tax.isInclusive);
+  const inclusiveTaxes = taxes.filter((tax) => tax.isInclusive);
+
+  if (exclusiveTaxes.length && inclusiveTaxes.length) {
+    throw new Error("Order item taxes must be all exclusive");
+  }
+
+  if (inclusiveTaxes.length) {
+    return 0;
+  }
+
+  const orderCheckItemAmount = calculateOrderCheckItemAmount({
+    orderCheckItem,
+  });
+  const orderItemSubtotalPrice = calculateOrderItemSubtotalPrice({
+    orderItem,
+  });
+  const orderCheckItemDiscounts = calculateOrderCheckItemDiscounts({
+    orderCheckItem,
+    orderItem,
+  });
+
+  const taxableSubtotal = Math.max(
+    0,
+    orderItemSubtotalPrice - orderCheckItemDiscounts
+  );
+
+  return taxes.reduce((totalTax, tax) => {
+    const taxAmount = calculateOrderItemTaxPrice({
+      orderItemSubtotal: taxableSubtotal,
+      tax,
+    });
+
+    // NOTE: We should round each tax amount,
+    // because when we are showing each tax separately we can have an issue with rounding errors
+    // example - showing/calculating tax hash map (showing each tax separately)
+    const roundedTaxAmount = bankersRound({
+      value: taxAmount * orderCheckItemAmount,
+    });
+
+    return totalTax + roundedTaxAmount;
+  }, 0);
+};

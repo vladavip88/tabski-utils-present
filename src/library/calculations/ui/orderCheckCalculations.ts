@@ -1,6 +1,4 @@
-import {
-  TaxType,
-} from "../../types/graphql";
+import { TaxType } from "../../types/graphql";
 import type {
   OrderCheckItem_V2,
   OrderCheck_V2,
@@ -15,6 +13,8 @@ import {
   calculateOrderCheckItemAmount,
   calculateOrderCheckItemDiscount,
   calculateOrderCheckItemDiscounts,
+  calculateOrderCheckItemTaxes,
+  calculateOrderItemTaxPrice,
 } from "../common/orderCheckCommonCalculations";
 import {
   calculateOrderItemBasePrice,
@@ -309,26 +309,11 @@ type CalculateOrderItemTaxPriceUI = (
 export const calculateOrderItemTaxPriceUI: CalculateOrderItemTaxPriceUI = ({
   orderItemSubtotal,
   tax,
-}) => {
-  const { type, amount, isInclusive, isRemoved } = tax;
-
-  if (isRemoved || isInclusive) return 0;
-
-  if (!type) throw new Error("Tax type is missing");
-
-  if (!isNumber(amount)) throw new Error("Tax amount is missing");
-
-  if (type === TaxType.Percentage) {
-    return orderItemSubtotal * (amount / 100);
-  }
-
-  if (type === TaxType.Flat) {
-    // Flat tax is the same whether inclusive or exclusive
-    return amount;
-  }
-
-  throw new Error(`Unknown tax type: ${type}`);
-};
+}) =>
+  calculateOrderItemTaxPrice({
+    orderItemSubtotal,
+    tax,
+  });
 
 // ========================================= //
 // === CALCULATE ORDER CHECK ITEM TAXES  === //
@@ -345,43 +330,11 @@ type CalculateOrderCheckItemTaxesUI = (
 export const calculateOrderCheckItemTaxesUI: CalculateOrderCheckItemTaxesUI = ({
   orderItem,
   orderCheckItem,
-}) => {
-  const taxes = orderItem.taxes || [];
-
-  if (taxes.length === 0) return 0;
-
-  const orderCheckItemAmount = calculateOrderCheckItemAmount({
+}) =>
+  calculateOrderCheckItemTaxes({
+    orderItem,
     orderCheckItem,
   });
-  const orderItemSubtotalPrice = calculateOrderItemSubtotalPrice({
-    orderItem,
-  });
-  const orderCheckItemDiscounts = calculateOrderCheckItemDiscounts({
-    orderCheckItem,
-    orderItem,
-  });
-
-  const taxableSubtotal = Math.max(
-    0,
-    orderItemSubtotalPrice - orderCheckItemDiscounts
-  );
-
-  return taxes.reduce((totalTax, tax) => {
-    const taxAmount = calculateOrderItemTaxPriceUI({
-      orderItemSubtotal: taxableSubtotal,
-      tax,
-    });
-
-    // NOTE: We should round each tax amount,
-    // because when we are showing each tax separately we can have an issue with rounding errors
-    // example - showing/calculating tax hash map (showing each tax separately)
-    const roundedTaxAmount = bankersRound({
-      value: taxAmount * orderCheckItemAmount,
-    });
-
-    return totalTax + roundedTaxAmount;
-  }, 0);
-};
 
 // ========================================= //
 // === CALCULATE ORDER CHECK TAXES PRICE === //
@@ -426,7 +379,7 @@ export const calculateOrderCheckTaxesUI: CalculateOrderCheckTaxesUI = ({
 
     return (
       sum +
-      calculateOrderCheckItemTaxesUI({
+      calculateOrderCheckItemTaxes({
         orderItem,
         orderCheckItem,
       })
@@ -489,7 +442,7 @@ export const calculateOrderItemsTaxesHashMapUI: CalculateOrderCheckItemTaxesHash
       for (const tax of orderItem.taxes) {
         if (!tax.id || tax.isRemoved || tax.isInclusive) continue;
 
-        const orderCheckItemTax = calculateOrderItemTaxPriceUI({
+        const orderCheckItemTax = calculateOrderItemTaxPrice({
           tax,
           orderItemSubtotal,
         });
@@ -544,12 +497,13 @@ export const calculateOrderCheckTotalPriceUI: CalculateOrderCheckTotalPriceUI =
       orderCheck,
     });
 
-    return (
+    return Math.max(
       orderCheckSubtotalPrice -
-      discountsPrice +
-      taxesPrice +
-      (order.fee || 0) +
-      (orderCheck.tip || 0)
+        discountsPrice +
+        taxesPrice +
+        (order.fee || 0) +
+        (orderCheck.tip || 0),
+      0
     );
   };
 

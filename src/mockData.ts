@@ -16,7 +16,7 @@ export const ORDER = {
   items: [
     {
       acceptedKdsId: null,
-      amount: 1,
+      amount: 3,
       cashDiscount: 0,
       chitName: "capricciosa",
       delayedUntil: null,
@@ -195,12 +195,12 @@ export const ORDER_CHECKS = {
       ],
       items: [
         {
-          amount: 1,
+          amount: 3,
           discounts: [],
           orderItemId: "68418150999ab37d8186d6d4",
-          refundAmount: 0,
+          refundAmount: 1,
           refundFailedAmount: 0,
-          voidAmount: 0,
+          voidAmount: 1,
           voidPaidAmount: 0,
           id: "68418150999ab37d8186d6df",
           createdAt: "2025-06-05T11:36:48.921+0000",

@@ -1,17 +1,18 @@
 import React from "react";
 import ListItem from "./ListItem";
 import {
+  calculateOrderCheckItemAmount,
   calculateOrderCheckItemBasePriceUI,
   calculateOrderCheckItemDiscountsHashMapUI,
+  calculateOrderCheckItemRefundedPriceUI,
   calculateOrderCheckItemTaxesUI,
   calculateOrderCheckItemTotalPriceUI,
-} from "@tabski-organization/tabski-utils";
-
-import {
+  calculateOrderCheckItemVoidedPriceUI,
   calculateOrderCheckItemInclusiveTaxApi,
   calculateOrderCheckItemBasePriceApi,
   calculateOrderCheckItemTotalPriceApi,
-} from "../library/calculations/api/orderCheckCalculations";
+  calculateOrderCheckItemTaxesApi,
+} from "@tabski-organization/tabski-utils";
 
 interface OrderCheckItemProps {
   order: any;
@@ -54,7 +55,11 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                   label={`Modifier: ${mod.name}`}
                   amount={mod.amount}
                   unitPrice={mod.price}
-                  value={Math.ceil(mod.price * (mod.amount || 1) * item.amount)}
+                  value={Math.ceil(
+                    mod.price *
+                      (mod.amount || 1) *
+                      calculateOrderCheckItemAmount({ orderCheckItem: item })
+                  )}
                 />
               ))}
 
@@ -65,7 +70,13 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                   value={orderItem.modifiers.reduce(
                     (acc: number, mod: any) =>
                       acc +
-                      Math.ceil(mod.price * (mod.amount || 1) * item.amount),
+                      Math.ceil(
+                        mod.price *
+                          (mod.amount || 1) *
+                          calculateOrderCheckItemAmount({
+                            orderCheckItem: item,
+                          })
+                      ),
                     0
                   )}
                 />
@@ -83,6 +94,27 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                 />
               ))}
 
+              <ListItem
+                refund
+                label={`Refunded Price ${
+                  item.refundAmount + item.refundFailedAmount
+                } (UI)`}
+                value={calculateOrderCheckItemRefundedPriceUI({
+                  orderItem,
+                  orderCheckItem: item,
+                })?.toString()}
+              />
+              <ListItem
+                refund
+                label={`Voided Price  ${
+                  item.voidAmount + item.voidPaidAmount
+                } (UI)`}
+                value={calculateOrderCheckItemVoidedPriceUI({
+                  orderItem,
+                  orderCheckItem: item,
+                })?.toString()}
+              />
+
               {showInfo && (
                 <>
                   <ListItem
@@ -91,29 +123,7 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                     value={calculateOrderCheckItemTotalPriceUI({
                       orderItem,
                       orderCheckItem: item,
-                    })}
-                  />
-
-                  <ListItem
-                    info
-                    label="Total (without taxes - API)"
-                    value={calculateOrderCheckItemTotalPriceApi({
-                      orderItem,
-                      orderCheckItem: item,
-                    })}
-                  />
-
-                  <ListItem
-                    info
-                    label="Taxes (inclusive)"
-                    value={calculateOrderCheckItemInclusiveTaxApi({
-                      orderCheckItemBasePrice:
-                        calculateOrderCheckItemBasePriceApi({
-                          orderItem,
-                          orderCheckItem: item,
-                        }),
-                      orderItemTaxes: orderItem.taxes || [],
-                    })}
+                    })?.toString()}
                   />
 
                   <ListItem
@@ -122,16 +132,40 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                     value={calculateOrderCheckItemTaxesUI({
                       orderItem,
                       orderCheckItem: item,
-                    })}
+                    })?.toString()}
+                  />
+
+                  <hr className="border-gray-500 border-1 " />
+
+                  <ListItem
+                    info
+                    label="Total (without taxes - API)"
+                    value={calculateOrderCheckItemTotalPriceApi({
+                      orderItem,
+                      orderCheckItem: item,
+                    })?.toString()}
+                  />
+
+                  <ListItem
+                    info
+                    label="Taxes (inclusive - API)"
+                    value={calculateOrderCheckItemInclusiveTaxApi({
+                      orderCheckItemBasePrice:
+                        calculateOrderCheckItemBasePriceApi({
+                          orderItem,
+                          orderCheckItem: item,
+                        }),
+                      orderItemTaxes: orderItem.taxes || [],
+                    })?.toString()}
                   />
 
                   <ListItem
                     info
                     label="Taxes (exclusive - API)"
-                    value={calculateOrderCheckItemTaxesUI({
+                    value={calculateOrderCheckItemTaxesApi({
                       orderItem,
                       orderCheckItem: item,
-                    })}
+                    })?.toString()}
                   />
                 </>
               )}
