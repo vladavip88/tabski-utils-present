@@ -4,8 +4,9 @@ import {
   calculateOrderCheckSubtotalPriceUI,
   calculateOrderCheckDiscountsHashMapUI,
   calculateOrderCheckTaxesUI,
+  calculateOrderCheckTaxesHashMapUI,
   calculateOrderCheckTotalPriceUI,
-} from "@tabski-organization/tabski-utils";
+} from "../library";
 
 interface OrderCheckSummaryProps {
   order: any;
@@ -37,6 +38,7 @@ const OrderCheckSummary: React.FC<OrderCheckSummaryProps> = ({
           value={discount.price}
         />
       ))}
+      <hr className="border-gray-500 border-1 " />
       <ListItem
         label="Order check taxes"
         value={calculateOrderCheckTaxesUI({
@@ -44,6 +46,16 @@ const OrderCheckSummary: React.FC<OrderCheckSummaryProps> = ({
           orderItems: order.items,
         })}
       />
+      <ListItem label="Order check taxes hash map" />
+      {calculateOrderCheckTaxesHashMapUI({
+            orderCheck: orderCheck,
+            orderItems: order.items,
+          }).map((tax: any) => <ListItem
+          key={tax.id}
+          label={tax.name}
+          value={tax.price}
+        />)}
+      <hr className="border-gray-500 border-1 " />
       <ListItem label="Order check tip" value={orderCheck.tip} />
       <ListItem
         label="Order check total"

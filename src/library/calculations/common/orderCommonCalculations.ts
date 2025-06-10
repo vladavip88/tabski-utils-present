@@ -2,13 +2,15 @@ import { isNumber } from "../../common/commonUtils";
 import { validateOrderItemDynamicPrice } from "../../common/validations";
 
 // Types
-import {OrderItemDynamicPriceTypes_V2} from '../../types/graphql';
 import type {
   
   OrderItemModifier_V2,
   OrderItem_V2,
 } from "../../types/graphql";
 
+import {
+  OrderItemDynamicPriceTypes_V2,
+} from "../../types/graphql";
 // ========================================== //
 // === CALCULATE ORDER ITEM DYNAMIC PRICE === //
 // ========================================== //

@@ -1,17 +1,12 @@
-import {
-
-  DynamicPriceType,
-
-  OrderChecksDiscountTypes_V2,
- 
-  OrderItemDynamicPriceTypes_V2,
-} from "../types/graphql";
 import type {
   DynamicPrice,
-
   OrderCheckDiscount_V2,
-
   OrderItemDynamicPrice_V2,
+} from "../types/graphql";
+import {
+  DynamicPriceType,
+  OrderChecksDiscountTypes_V2,
+  OrderItemDynamicPriceTypes_V2,
 } from "../types/graphql";
 import { isNumber } from "./commonUtils";
 

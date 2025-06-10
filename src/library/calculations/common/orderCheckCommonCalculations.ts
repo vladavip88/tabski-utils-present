@@ -3,14 +3,19 @@ import type {
   OrderCheckDiscount_V2,
   OrderCheckItem_V2,
   OrderItemTaxes_V2,
+  OrderCheck_V2,
 } from "../../types/graphql";
-import { OrderChecksDiscountTypes_V2, TaxType } from "../../types/graphql";
+
+import {
+  OrderChecksDiscountTypes_V2,
+  TaxType,
+} from "../../types/graphql";
 
 import { validateDiscount } from "../../common/validations";
-import { isNumber } from "../../common/commonUtils";
-import { bankersRound } from "../commonCalculations";
+import { isNumber, bankersRound } from "../../common/commonUtils";
 import { calculateOrderItemSubtotalPrice } from "./orderCommonCalculations";
-import { calculateOrderCheckSubtotalPriceUI } from "../ui/orderCheckCalculations";
+import { calculateOrderCheckSubtotalPriceUI, calculateOrderCheckItemTotalPriceUI } from "../ui/orderCheckCalculations";
+
 
 // ========================================= //
 // === CALCULATE ORDER CHECK ITEM AMOUNT === //
@@ -101,7 +106,8 @@ export const calculateOrderCheckItemDiscounts: CalculateOrderCheckItemDiscounts 
         orderItemSubtotalPrice,
       });
 
-      return total + bankersRound({ value: orderCheckItemDiscount });
+      // return total + bankersRound({ value: orderCheckItemDiscount });
+      return total + orderCheckItemDiscount;
     }, 0);
   };
 
@@ -144,47 +150,58 @@ export const applyOrderCheckDiscountOnExistingCheckItems: ApplyOrderCheckDiscoun
 
     validateDiscount(discount);
 
-    // NOTE: Think about calling UI function here
-    const itemsSubtotal = calculateOrderCheckSubtotalPriceUI({
-      orderCheckItems,
-      orderItems,
-    });
-
+    
     // Build map for faster lookup
-    const checkItemMap = new Map(
+    const orderCheckItemsMap = new Map(
       orderCheckItems.map((checkItem) => [checkItem.orderItemId, checkItem])
     );
 
-    let discountRemaining = discount.amount;
-    const updatedCheckItems: Partial<OrderCheckItem_V2>[] = [];
-
-    const eligibleItems = orderItems.filter((item) =>
-      checkItemMap.has(item.id)
+   // Filter eligible order items based on the order check items
+    const eligibleOrderItems = orderItems.filter((item) =>
+      orderCheckItemsMap.has(item.id)
     );
 
-    const lastIndex = eligibleItems.length - 1;
+    // NOTE: Think about calling UI function here
+    const orderCheckSubtotal = calculateOrderCheckSubtotalPriceUI({
+      orderCheckItems,
+      orderItems: eligibleOrderItems,
+    });
 
-    eligibleItems.forEach((orderItem, index) => {
-      const checkItem = checkItemMap.get(orderItem.id)!;
-      const itemSubtotal = calculateOrderItemSubtotalPrice({ orderItem });
-      const itemAmount = checkItem.amount ?? 1;
+    console.log("AD orderCheckSubtotal", orderCheckSubtotal);
 
+    let orderCheckRemainingDiscount = discount.amount;
+
+    const updatedOrderCheckItems: Partial<OrderCheckItem_V2>[] = [];
+    const lastEligibleOrderItemsIndex = eligibleOrderItems.length - 1;
+
+    orderCheckItems.forEach((orderCheckItem, index) => {
+      const orderItem = eligibleOrderItems.find(eligibleOrderItem => eligibleOrderItem.id === orderCheckItem.orderItemId);
+     
+      const orderCheckItemSubtotal = calculateOrderCheckItemTotalPriceUI({ orderItem: orderItem!, orderCheckItem });
+      const orderCheckItemAmount = Math.max(orderCheckItem.amount!, 1);
+
+      console.log("AD orderCheckItemSubtotal", orderCheckItemSubtotal);
+      console.log("AD orderCheckItemAmount", orderCheckItemAmount);
       let discountForItem = 0;
 
       if (
         discount.type === OrderChecksDiscountTypes_V2.FixedAmountOff ||
         discount.type === OrderChecksDiscountTypes_V2.OpenAmountOff
       ) {
-        const proportionalShare = itemSubtotal / itemsSubtotal;
+        const proportionalShare = orderCheckItemSubtotal / orderCheckSubtotal;
         const rawItemDiscount = discount.amount * proportionalShare;
 
-        if (index === lastIndex) {
+        console.log("AD proportionalShare", proportionalShare);
+        console.log("AD rawItemDiscount", rawItemDiscount);
+
+        if (index === lastEligibleOrderItemsIndex) {
           // Adjust for rounding loss on last item
-          discountForItem = discountRemaining / itemAmount;
+          discountForItem = orderCheckRemainingDiscount / orderCheckItemAmount;
         } else {
-          discountForItem = Math.floor(rawItemDiscount / itemAmount);
-          discountRemaining -= discountForItem * itemAmount;
+          discountForItem = Math.floor(rawItemDiscount / orderCheckItemAmount);
+          orderCheckRemainingDiscount -= discountForItem * orderCheckItemAmount;
         }
+        console.log("AD discountForItem", discountForItem);
       } else {
         // Percentage-based discount — just append it
         discountForItem = discount.amount;
@@ -195,13 +212,13 @@ export const applyOrderCheckDiscountOnExistingCheckItems: ApplyOrderCheckDiscoun
         amount: discountForItem,
       };
 
-      updatedCheckItems.push({
-        ...checkItem,
-        discounts: [...(checkItem.discounts ?? []), newDiscount],
+      updatedOrderCheckItems.push({
+        ...orderCheckItem,
+        discounts: [...(orderCheckItem.discounts ?? []), newDiscount],
       });
     });
 
-    return updatedCheckItems;
+    return updatedOrderCheckItems;
   };
 
 // ====================================== //
@@ -243,8 +260,9 @@ export const calculateOrderItemTaxPrice: CalculateOrderItemTaxPrice = ({
 // === CALCULATE ORDER CHECK ITEM TAXES  === //
 // ========================================= //
 interface CalculateOrderCheckItemTaxesParams {
-  orderItem: Partial<OrderItem_V2>;
-  orderCheckItem: Partial<OrderCheckItem_V2>;
+  orderItems: Partial<OrderItem_V2>[];
+  orderCheck: Partial<OrderCheck_V2>;
+  orderCheckItemId: string;
 }
 
 type CalculateOrderCheckItemTaxes = (
@@ -252,9 +270,26 @@ type CalculateOrderCheckItemTaxes = (
 ) => number;
 
 export const calculateOrderCheckItemTaxes: CalculateOrderCheckItemTaxes = ({
-  orderItem,
-  orderCheckItem,
+  orderItems,
+  orderCheck,
+  orderCheckItemId,
 }) => {
+  const orderCheckItem = orderCheck.items?.find(
+    (item) => item.id === orderCheckItemId
+  );
+
+  if (!orderCheckItem) {
+    throw new Error("Order check item not found");
+  }
+
+  const orderItem = orderItems.find(
+    (item) => item.id === orderCheckItem?.orderItemId
+  );
+
+  if (!orderItem) {
+    throw new Error("Order item not found for the given order check item");
+  }
+
   const taxes = orderItem.taxes || [];
   const exclusiveTaxes = taxes.filter((tax) => !tax.isInclusive);
   const inclusiveTaxes = taxes.filter((tax) => tax.isInclusive);
@@ -267,14 +302,38 @@ export const calculateOrderCheckItemTaxes: CalculateOrderCheckItemTaxes = ({
     return 0;
   }
 
+  const originalCheckItems = filterVoidedOrderCheckItems({
+    orderCheckItems: orderCheck.items || [],
+  });
+
+  const finalCheckItems = (orderCheck.discounts || []).reduce(
+    (items, discount) =>
+      applyOrderCheckDiscountOnExistingCheckItems({
+        orderCheckItems: items,
+        orderItems,
+        discount,
+      }),
+    originalCheckItems
+  );
+
+  const finalOrderCheckItem = finalCheckItems.find(
+    (item) => item.id === orderCheckItemId
+  );
+
+  if (!finalOrderCheckItem) {
+    throw new Error(
+      "Final order check item not found after applying discounts"
+    );
+  }
+
   const orderCheckItemAmount = calculateOrderCheckItemAmount({
-    orderCheckItem,
+    orderCheckItem: finalOrderCheckItem,
   });
   const orderItemSubtotalPrice = calculateOrderItemSubtotalPrice({
     orderItem,
   });
   const orderCheckItemDiscounts = calculateOrderCheckItemDiscounts({
-    orderCheckItem,
+    orderCheckItem: finalOrderCheckItem,
     orderItem,
   });
 
@@ -292,9 +351,11 @@ export const calculateOrderCheckItemTaxes: CalculateOrderCheckItemTaxes = ({
     // NOTE: We should round each tax amount,
     // because when we are showing each tax separately we can have an issue with rounding errors
     // example - showing/calculating tax hash map (showing each tax separately)
-    const roundedTaxAmount = bankersRound({
-      value: taxAmount * orderCheckItemAmount,
-    });
+    // const roundedTaxAmount = bankersRound({
+    //   value: taxAmount * orderCheckItemAmount,
+    // });
+    const roundedTaxAmount =  taxAmount * orderCheckItemAmount;
+    
 
     return totalTax + roundedTaxAmount;
   }, 0);

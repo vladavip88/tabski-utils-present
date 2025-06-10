@@ -5,14 +5,15 @@ import {
   calculateOrderCheckItemBasePriceUI,
   calculateOrderCheckItemDiscountsHashMapUI,
   calculateOrderCheckItemRefundedPriceUI,
-  calculateOrderCheckItemTaxesUI,
+
   calculateOrderCheckItemTotalPriceUI,
   calculateOrderCheckItemVoidedPriceUI,
   calculateOrderCheckItemInclusiveTaxApi,
   calculateOrderCheckItemBasePriceApi,
   calculateOrderCheckItemTotalPriceApi,
   calculateOrderCheckItemTaxesApi,
-} from "@tabski-organization/tabski-utils";
+} from "../library";
+
 
 interface OrderCheckItemProps {
   order: any;
@@ -126,23 +127,25 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                     })?.toString()}
                   />
 
-                  <ListItem
-                    info
-                    label="Taxes (exclusive - UI)"
-                    value={calculateOrderCheckItemTaxesUI({
-                      orderItem,
-                      orderCheckItem: item,
-                    })?.toString()}
-                  />
 
                   <hr className="border-gray-500 border-1 " />
 
                   <ListItem
+                  info
+                    label="Base Price (API)"
+                    value={calculateOrderCheckItemBasePriceApi({
+                      orderItems: order.items,
+                      orderCheck,
+                      orderCheckItemId: item.id,
+                    })?.toString()}
+                  />
+                  <ListItem
                     info
                     label="Total (without taxes - API)"
                     value={calculateOrderCheckItemTotalPriceApi({
-                      orderItem,
-                      orderCheckItem: item,
+                      orderItems: order.items,
+                      orderCheck,
+                      orderCheckItemId: item.id,
                     })?.toString()}
                   />
 
@@ -152,8 +155,9 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                     value={calculateOrderCheckItemInclusiveTaxApi({
                       orderCheckItemBasePrice:
                         calculateOrderCheckItemBasePriceApi({
-                          orderItem,
-                          orderCheckItem: item,
+                          orderItems: order.items,
+                          orderCheck,
+                          orderCheckItemId: item.id,
                         }),
                       orderItemTaxes: orderItem.taxes || [],
                     })?.toString()}
@@ -163,8 +167,9 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                     info
                     label="Taxes (exclusive - API)"
                     value={calculateOrderCheckItemTaxesApi({
-                      orderItem,
-                      orderCheckItem: item,
+                      orderItems: order.items,
+                      orderCheck,
+                      orderCheckItemId: item.id,
                     })?.toString()}
                   />
                 </>

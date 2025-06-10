@@ -101,7 +101,7 @@ export const ORDER = {
     },
     {
       acceptedKdsId: null,
-      amount: 1,
+      amount: 2,
       cashDiscount: 0,
       chitName: "hawaiian",
       delayedUntil: null,
@@ -180,34 +180,34 @@ export const ORDER_CHECKS = {
     {
       consumerId: "1",
       discounts: [
-        {
-          amount: 200,
-          id: "cly5wa7ds01zygebomibmdk6y",
-          name: "Fixed amount off 200",
-          type: "FIXED_AMOUNT_OFF",
-        },
+        // {
+        //   amount: 200,
+        //   id: "cly5wa7ds01zygebomibmdk6y",
+        //   name: "CHECK Fixed amount off 200",
+        //   type: "FIXED_AMOUNT_OFF",
+        // },
         {
           amount: 10,
           id: "clx8ytk9f0001re77cs8gfi9x",
-          name: "Fixed Percentage Off 10",
+          name: "CHECK Fixed Percentage Off 10",
           type: "FIXED_PERCENTAGE_OFF",
         },
       ],
       items: [
         {
-          amount: 3,
+          amount: 1,
           discounts: [],
           orderItemId: "68418150999ab37d8186d6d4",
-          refundAmount: 1,
+          refundAmount: 0,
           refundFailedAmount: 0,
-          voidAmount: 1,
+          voidAmount: 0,
           voidPaidAmount: 0,
           id: "68418150999ab37d8186d6df",
           createdAt: "2025-06-05T11:36:48.921+0000",
           updatedAt: "2025-06-05T11:36:48.921+0000",
         },
         {
-          amount: 0.5,
+          amount: 1,
           discounts: [
             {
               amount: 200,
@@ -259,7 +259,7 @@ export const ORDER_CHECKS = {
       ],
       items: [
         {
-          amount: 0.5,
+          amount: 1,
           discounts: [],
           orderItemId: "68418150999ab37d8186d6d5",
           refundAmount: 0,

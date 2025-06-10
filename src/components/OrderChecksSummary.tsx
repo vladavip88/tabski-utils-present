@@ -5,7 +5,7 @@ import {
   calculateOrderChecksTotalDiscountsUI,
   calculateOrderChecksTotalTaxesUI,
   calculateOrderChecksTotalPriceUI,
-} from "@tabski-organization/tabski-utils";
+} from "../library";
 
 interface OrderChecksSummaryProps {
   order: any;

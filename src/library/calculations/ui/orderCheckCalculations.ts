@@ -1,5 +1,4 @@
-import { TaxType } from "../../types/graphql";
-import type {
+import type{
   OrderCheckItem_V2,
   OrderCheck_V2,
   OrderItem_V2,
@@ -7,14 +6,13 @@ import type {
   Order_V2,
 } from "../../types/graphql";
 
-import { bankersRound } from "../commonCalculations";
-import { isNumber } from "../../common/commonUtils";
+import { isNumber, bankersRound } from "../../common/commonUtils";
 import {
   calculateOrderCheckItemAmount,
   calculateOrderCheckItemDiscount,
   calculateOrderCheckItemDiscounts,
-  calculateOrderCheckItemTaxes,
   calculateOrderItemTaxPrice,
+  calculateOrderCheckItemTaxes,
 } from "../common/orderCheckCommonCalculations";
 import {
   calculateOrderItemBasePrice,
@@ -75,9 +73,10 @@ export const calculateOrderCheckItemTotalPriceUI: CalculateOrderCheckItemTotalPr
     const total =
       checkItemAmount * (orderItemSubtotalPrice - checkItemDiscountsPrice);
 
-    return bankersRound({
-      value: total,
-    });
+    // return bankersRound({
+    //   value: total,
+    // });
+    return total
   };
 
 // =============================================== //
@@ -195,10 +194,10 @@ export const calculateOrderCheckDiscountsUI: CalculateOrderCheckDiscountsUI = ({
     });
 
     return (
-      total +
-      bankersRound({
-        value: discountPrice,
-      })
+      total + discountPrice
+      // bankersRound({
+      //   value: discountPrice,
+      // })
     );
   }, 0);
 };
@@ -239,7 +238,8 @@ export const calculateOrderCheckDiscountsHashMapUI: CalculateOrderCheckDiscounts
       return {
         id: discount.id,
         name: discount.name,
-        price: bankersRound({ value: discountPrice }),
+        // price: bankersRound({ value: discountPrice }),
+        price: discountPrice,
       };
     });
   };
@@ -290,7 +290,8 @@ export const calculateOrderCheckItemDiscountsHashMapUI: CalculateOrderCheckItemD
       return {
         id: discount.id,
         name: discount.name,
-        price: bankersRound({ value: orderCheckItemAmount * discountPrice }),
+        // price: bankersRound({ value: orderCheckItemAmount * discountPrice }),
+        price: orderCheckItemAmount * discountPrice,
       };
     });
   };
@@ -319,8 +320,9 @@ export const calculateOrderItemTaxPriceUI: CalculateOrderItemTaxPriceUI = ({
 // === CALCULATE ORDER CHECK ITEM TAXES  === //
 // ========================================= //
 interface CalculateOrderCheckItemTaxesUIParams {
-  orderItem: Partial<OrderItem_V2>;
-  orderCheckItem: Partial<OrderCheckItem_V2>;
+  orderItems: Partial<OrderItem_V2>[];
+  orderCheck: Partial<OrderCheck_V2>;
+  orderCheckItemId: string;
 }
 
 type CalculateOrderCheckItemTaxesUI = (
@@ -328,12 +330,14 @@ type CalculateOrderCheckItemTaxesUI = (
 ) => number;
 
 export const calculateOrderCheckItemTaxesUI: CalculateOrderCheckItemTaxesUI = ({
-  orderItem,
-  orderCheckItem,
+  orderItems,
+  orderCheck,
+  orderCheckItemId,
 }) =>
   calculateOrderCheckItemTaxes({
-    orderItem,
-    orderCheckItem,
+    orderItems,
+    orderCheck,
+    orderCheckItemId,
   });
 
 // ========================================= //
@@ -379,9 +383,10 @@ export const calculateOrderCheckTaxesUI: CalculateOrderCheckTaxesUI = ({
 
     return (
       sum +
-      calculateOrderCheckItemTaxes({
-        orderItem,
-        orderCheckItem,
+      calculateOrderCheckItemTaxesUI({
+        orderItems,
+        orderCheck,
+        orderCheckItemId: orderCheckItem.id!,
       })
     );
   }, 0);
@@ -392,38 +397,36 @@ export const calculateOrderCheckTaxesUI: CalculateOrderCheckTaxesUI = ({
 // ==================================================== //
 // === ORDER CHECK ITEMS TAXES HASH MAP CALCULATION === //
 // ==================================================== //
-interface CalculateOrderCheckItemTaxesHashMapUIParams {
+interface CalculateOrderCheckTaxesHashMapUIParams {
   orderCheck: Partial<OrderCheck_V2>;
   orderItems: Partial<OrderItem_V2>[];
 }
 
-type CalculateOrderCheckItemTaxesHashMapUI = (
-  params: CalculateOrderCheckItemTaxesHashMapUIParams
+type CalculateOrderCheckTaxesHashMapUI = (
+  params: CalculateOrderCheckTaxesHashMapUIParams
 ) => {
   id: string;
   name: string;
   price: number;
 }[];
 
-export const calculateOrderItemsTaxesHashMapUI: CalculateOrderCheckItemTaxesHashMapUI =
+export const calculateOrderCheckTaxesHashMapUI: CalculateOrderCheckTaxesHashMapUI =
   ({ orderCheck, orderItems }) => {
     if (!orderCheck.items?.length) return [];
 
-    // Step 1: Filter voided items
-    let orderCheckItems = filterVoidedOrderCheckItems({
-      orderCheckItems: orderCheck.items,
+    const originalCheckItems = filterVoidedOrderCheckItems({
+      orderCheckItems: orderCheck.items || [],
     });
 
-    // Step 2: Apply discounts, if any
-    if (orderCheck.discounts?.length) {
-      for (const discount of orderCheck.discounts) {
-        orderCheckItems = applyOrderCheckDiscountOnExistingCheckItems({
+    const finalCheckItems = (orderCheck.discounts || []).reduce(
+      (items, discount) =>
+        applyOrderCheckDiscountOnExistingCheckItems({
+          orderCheckItems: items,
           orderItems,
-          orderCheckItems,
           discount,
-        });
-      }
-    }
+        }),
+      originalCheckItems
+    );
 
     // Step 3: Create a fast lookup for order items by ID
     const orderItemMap = new Map(orderItems.map((item) => [item.id, item]));
@@ -431,23 +434,37 @@ export const calculateOrderItemsTaxesHashMapUI: CalculateOrderCheckItemTaxesHash
     // Step 4: Accumulate taxes
     const taxesMap: Record<string, { name: string; amount: number }> = {};
 
-    for (const orderCheckItem of orderCheckItems) {
-      const orderItem = orderItemMap.get(orderCheckItem.orderItemId);
+    for (const finalCheckItem of finalCheckItems) {
+      const orderItem = orderItemMap.get(finalCheckItem.orderItemId);
       if (!orderItem || !orderItem.taxes?.length) continue;
 
+      const orderCheckItemAmount = calculateOrderCheckItemAmount({
+        orderCheckItem: finalCheckItem,
+      });
       const orderItemSubtotal = calculateOrderItemSubtotalPrice({
         orderItem,
       });
+      const orderCheckItemDiscounts = calculateOrderCheckItemDiscounts({
+        orderCheckItem: finalCheckItem,
+        orderItem,
+      });
+      const taxableSubtotal = Math.max(
+        0,
+        orderItemSubtotal - orderCheckItemDiscounts
+      );
 
       for (const tax of orderItem.taxes) {
-        if (!tax.id || tax.isRemoved || tax.isInclusive) continue;
+        if (tax.isRemoved || tax.isInclusive) continue;
 
-        const orderCheckItemTax = calculateOrderItemTaxPrice({
+        const finalCheckItemTax = calculateOrderItemTaxPriceUI({
           tax,
-          orderItemSubtotal,
+          orderItemSubtotal: taxableSubtotal,
         });
 
-        const roundedAmount = bankersRound({ value: orderCheckItemTax });
+        // const roundedAmount = bankersRound({
+        //   value: orderCheckItemAmount * finalCheckItemTax,
+        // });
+        const roundedAmount = orderCheckItemAmount * finalCheckItemTax;
 
         if (taxesMap[tax.id]) {
           taxesMap[tax.id].amount += roundedAmount;

@@ -52,3 +52,18 @@ export const isNumber = (value: any): value is number => {
     value !== undefined
   );
 };
+
+export const bankersRound = ({ value }: { value: number }): number => {
+  const floorValue = Math.floor(value);
+  const decimalPart = value - floorValue;
+  const EPSILON = 1e-10;
+
+  if (
+    decimalPart > 0.5 ||
+    (Math.abs(decimalPart - 0.5) < EPSILON && floorValue % 2 !== 0)
+  ) {
+    return floorValue + 1;
+  }
+
+  return floorValue;
+};
