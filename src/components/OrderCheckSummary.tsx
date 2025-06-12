@@ -6,7 +6,7 @@ import {
   calculateOrderCheckTaxesUI,
   calculateOrderCheckTaxesHashMapUI,
   calculateOrderCheckTotalPriceUI,
-} from "../library";
+} from "@tabski-organization/tabski-utils";
 
 interface OrderCheckSummaryProps {
   order: any;

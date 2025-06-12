@@ -180,27 +180,39 @@ export const ORDER_CHECKS = {
     {
       consumerId: "1",
       discounts: [
-        // {
-        //   amount: 200,
-        //   id: "cly5wa7ds01zygebomibmdk6y",
-        //   name: "CHECK Fixed amount off 200",
-        //   type: "FIXED_AMOUNT_OFF",
-        // },
+        {
+          amount: 200,
+          id: "cly5wa7ds01zygebomibmdk6y",
+          name: "CHECK Fixed amount off 200",
+          type: "FIXED_AMOUNT_OFF",
+        },
+        {
+          amount: 173,
+          id: "cly5wa7ds01zygebomibmdk6p",
+          name: "CHECK Fixed amount off 173",
+          type: "FIXED_AMOUNT_OFF",
+        },
         {
           amount: 10,
           id: "clx8ytk9f0001re77cs8gfi9x",
           name: "CHECK Fixed Percentage Off 10",
           type: "FIXED_PERCENTAGE_OFF",
         },
+        {
+          amount: 2.34567,
+          id: "clx8ytk9f0001re77cs8gfi9t",
+          name: "CHECK Fixed Percentage Off 2.34567",
+          type: "FIXED_PERCENTAGE_OFF",
+        },
       ],
       items: [
         {
-          amount: 1,
+          amount: 3,
           discounts: [],
           orderItemId: "68418150999ab37d8186d6d4",
-          refundAmount: 0,
+          refundAmount: 1,
           refundFailedAmount: 0,
-          voidAmount: 0,
+          voidAmount: 1,
           voidPaidAmount: 0,
           id: "68418150999ab37d8186d6df",
           createdAt: "2025-06-05T11:36:48.921+0000",
@@ -287,114 +299,3 @@ export const ORDER_CHECKS = {
   updatedAt: "2025-06-05T11:36:48.921+0000",
 };
 
-// export const ORDER_CHECK = {
-//   "id": "683ff913abc7c9f777a28517",
-//   "checks": [
-//     {
-//       "consumerId": "clb0z1cmg0575bhmruuws7tun",
-//       "discounts": [
-//         {
-//           "amount": 200,
-//           "id": "cly5wa7ds01zygebomibmdk6y",
-//           "name": "Fixed amount off 200",
-//           "type": "FIXED_AMOUNT_OFF"
-//         },
-//         {
-//           "amount": 10,
-//           "id": "clx8ytk9f0001re77cs8gfi9x",
-//           "name": "Fixed Percentage Off 10%",
-//           "type": "FIXED_PERCENTAGE_OFF"
-//         }
-//       ],
-//       "items": [
-//         {
-//           "amount": 3,
-//           "discounts": [
-//             {
-//               "amount": 200,
-//               "id": "cly5wa7ds01zygebomibmdk6y",
-//               "name": "Fixed amount off 200",
-//               "type": "FIXED_AMOUNT_OFF"
-//             },
-//             {
-//               "amount": 10,
-//               "id": "clx8ytk9f0001re77cs8gfi9x",
-//               "name": "Fixed Percentage Off 10",
-//               "type": "FIXED_PERCENTAGE_OFF"
-//             }
-//           ],
-//           "orderItemId": "683ff913abc7c9f777a28514",
-//           "refundAmount": 0,
-//           "refundFailedAmount": 0,
-//           "voidAmount": 0,
-//           "voidPaidAmount": 0,
-//           "id": "683ff91babc7c9f777a2851f",
-//           "createdAt": "2025-06-04T07:43:23.349+0000",
-//           "updatedAt": "2025-06-04T07:43:23.349+0000"
-//         },
-//         {
-//           "amount": 2,
-//           "discounts": [
-//             {
-//               "amount": 200,
-//               "id": "cly5wa7ds01zygebomibmdk6y",
-//               "name": "Fixed amount off 200",
-//               "type": "FIXED_AMOUNT_OFF"
-//             },
-//             {
-//               "amount": 10,
-//               "id": "clx8ytk9f0001re77cs8gfi9x",
-//               "name": "Fixed Percentage off 10",
-//               "type": "FIXED_PERCENTAGE_OFF"
-//             }
-//           ],
-//           "orderItemId": "683ff913abc7c9f777a28515",
-//           "refundAmount": 0,
-//           "refundFailedAmount": 0,
-//           "voidAmount": 0,
-//           "voidPaidAmount": 0,
-//           "id": "683ff91babc7c9f777a28520",
-//           "createdAt": "2025-06-04T07:43:23.350+0000",
-//           "updatedAt": "2025-06-04T07:43:23.350+0000"
-//         },
-//         {
-//           "amount": 4,
-//           "discounts": [
-//             {
-//               "amount": 200,
-//               "id": "cly5wa7ds01zygebomibmdk6y",
-//               "name": "Fixed amount off 200",
-//               "type": "FIXED_AMOUNT_OFF"
-//             },
-//             {
-//               "amount": 10,
-//               "id": "clx8ytk9f0001re77cs8gfi9x",
-//               "name": "Fixed Percentage off 10%",
-//               "type": "FIXED_PERCENTAGE_OFF"
-//             }
-//           ],
-//           "orderItemId": "683ff913abc7c9f777a28516",
-//           "refundAmount": 0,
-//           "refundFailedAmount": 0,
-//           "voidAmount": 0,
-//           "voidPaidAmount": 0,
-//           "id": "683ff91babc7c9f777a28521",
-//           "createdAt": "2025-06-04T07:43:23.350+0000",
-//           "updatedAt": "2025-06-04T07:43:23.350+0000"
-//         }
-//       ],
-//       "paymentProvider": "CLOVER",
-//       "paymentStatus": "NONE",
-//       "paymentTransactions": [],
-//       "referenceId": "683FF913VEGW",
-//       "tip": 100,
-//       "id": "683ff91babc7c9f777a2851e",
-//       "createdAt": "2025-06-04T07:43:23.350+0000",
-//       "updatedAt": "2025-06-04T07:43:23.350+0000"
-//     }
-//   ],
-//   "merchantId": "cl78yyrut89323lmrexxfoo9p",
-//   "orderId": "683ff913abc7c9f777a28513",
-//   "createdAt": "2025-06-04T07:43:23.350+0000",
-//   "updatedAt": "2025-06-04T07:43:23.350+0000"
-// }

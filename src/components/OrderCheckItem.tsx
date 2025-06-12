@@ -3,7 +3,7 @@ import ListItem from "./ListItem";
 import {
   calculateOrderCheckItemAmount,
   calculateOrderCheckItemBasePriceUI,
-  calculateOrderCheckItemDiscountsHashMapUI,
+  calculateOrderCheckItemUnitDiscountsHashMapUI,
   calculateOrderCheckItemRefundedPriceUI,
 
   calculateOrderCheckItemTotalPriceUI,
@@ -12,7 +12,7 @@ import {
   calculateOrderCheckItemBasePriceApi,
   calculateOrderCheckItemTotalPriceApi,
   calculateOrderCheckItemTaxesApi,
-} from "../library";
+} from "@tabski-organization/tabski-utils";
 
 
 interface OrderCheckItemProps {
@@ -83,7 +83,7 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                 />
               )}
 
-              {calculateOrderCheckItemDiscountsHashMapUI({
+              {calculateOrderCheckItemUnitDiscountsHashMapUI({
                 orderCheckItem: item,
                 orderItems: order.items,
               }).map((discount: any) => (
