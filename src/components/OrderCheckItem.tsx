@@ -3,9 +3,8 @@ import ListItem from "./ListItem";
 import {
   calculateOrderCheckItemAmount,
   calculateOrderCheckItemBasePriceUI,
-  calculateOrderCheckItemUnitDiscountsHashMapUI,
+  calculateOrderCheckItemDiscountsHashMapUI,
   calculateOrderCheckItemRefundedPriceUI,
-
   calculateOrderCheckItemTotalPriceUI,
   calculateOrderCheckItemVoidedPriceUI,
   calculateOrderCheckItemInclusiveTaxApi,
@@ -83,9 +82,9 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                 />
               )}
 
-              {calculateOrderCheckItemUnitDiscountsHashMapUI({
+              {calculateOrderCheckItemDiscountsHashMapUI({
                 orderCheckItem: item,
-                orderItems: order.items,
+                orderItems: order.ites,
               }).map((discount: any) => (
                 <ListItem
                   key={discount.id}
