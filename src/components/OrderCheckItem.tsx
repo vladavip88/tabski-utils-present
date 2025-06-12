@@ -84,7 +84,7 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
 
               {calculateOrderCheckItemDiscountsHashMapUI({
                 orderCheckItem: item,
-                orderItems: order.ites,
+                orderItems: order.items,
               }).map((discount: any) => (
                 <ListItem
                   key={discount.id}
