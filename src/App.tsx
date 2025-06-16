@@ -72,7 +72,7 @@ function App() {
           !orderCheckError && (
             <>
               {parsedOrderChecks.checks?.map((check) => (
-                <div key={check.id} >
+                <div key={check.id}>
                   <h5 className="text-xl font-bold  my-4">
                     ORDER CHECK ({check.id})
                   </h5>
@@ -81,7 +81,11 @@ function App() {
                     orderCheck={check}
                     showInfo={showInfo}
                   />
-                  <OrderCheckSummary order={parsedOrder} orderCheck={check} />
+                  <OrderCheckSummary
+                    order={parsedOrder}
+                    orderCheck={check}
+                    showInfo={showInfo}
+                  />
                   <hr className="border-gray-800 border-2 mt-4" />
                 </div>
               ))}

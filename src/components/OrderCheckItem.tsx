@@ -10,9 +10,8 @@ import {
   calculateOrderCheckItemInclusiveTaxApi,
   calculateOrderCheckItemBasePriceApi,
   calculateOrderCheckItemTotalPriceApi,
-  calculateOrderCheckItemTaxesApi,
+  calculateOrderCheckItemTotalTaxesApi,
 } from "@tabski-organization/tabski-utils";
-
 
 interface OrderCheckItemProps {
   order: any;
@@ -126,11 +125,10 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                     })?.toString()}
                   />
 
-
                   <hr className="border-gray-500 border-1 " />
 
                   <ListItem
-                  info
+                    info
                     label="Base Price (API)"
                     value={calculateOrderCheckItemBasePriceApi({
                       orderItems: order.items,
@@ -165,7 +163,7 @@ const OrderCheckItem: React.FC<OrderCheckItemProps> = ({
                   <ListItem
                     info
                     label="Taxes (exclusive - API)"
-                    value={calculateOrderCheckItemTaxesApi({
+                    value={calculateOrderCheckItemTotalTaxesApi({
                       orderItems: order.items,
                       orderCheck,
                       orderCheckItemId: item.id,
