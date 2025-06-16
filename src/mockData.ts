@@ -11,7 +11,7 @@ export const ORDER = {
   deliveryInfo: null,
   employeeId: null,
   employeeName: null,
-  fee: 0,
+  fee: 333,
   isOpenTab: false,
   items: [
     {
@@ -248,7 +248,7 @@ export const ORDER_CHECKS = {
       paymentStatus: "NONE",
       paymentTransactions: [],
       referenceId: "68418150SYUJ",
-      tip: null,
+      tip: 222,
       id: "68418150999ab37d8186d6de",
       createdAt: "2025-06-05T11:36:48.921+0000",
       updatedAt: "2025-06-05T11:36:48.921+0000",
@@ -298,4 +298,3 @@ export const ORDER_CHECKS = {
   createdAt: "2025-06-05T11:36:48.921+0000",
   updatedAt: "2025-06-05T11:36:48.921+0000",
 };
-
