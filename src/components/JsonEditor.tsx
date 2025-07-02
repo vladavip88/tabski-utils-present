@@ -18,7 +18,7 @@ interface JsonEditorProps {
 const JsonEditor: FC<JsonEditorProps> = ({ label, value, error, onChange }) => (
   <div className="pt-4">
     <label className="block text-sm font-medium text-gray-700">{label}</label>
-    <div className="border border-gray-300 overflow-auto max-h-[400px]">
+    <div className="border border-gray-300 overflow-auto max-h-[88vh]">
       <Editor
         value={value}
         onValueChange={onChange}

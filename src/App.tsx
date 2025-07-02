@@ -13,9 +13,7 @@ function App() {
   const [order, setOrder] = useState("");
   const [parsedOrder, setParsedOrder] = useState(ORDER);
   const [orderError, setOrderError] = useState("");
-  const [orderCheck, setOrderCheck] = useState("");
-  const [parsedOrderChecks, setParsedOrderChecks] = useState(ORDER_CHECKS);
-  const [orderCheckError, setOrderCheckError] = useState("");
+ 
 
   const handleUpdate = () => {
     try {
@@ -25,19 +23,10 @@ function App() {
     } catch (error) {
       setOrderError((error as Error).message);
     }
-
-    try {
-      const parsedOrderCheckData = JSON.parse(orderCheck);
-      setParsedOrderChecks(parsedOrderCheckData);
-      setOrderCheckError("");
-    } catch (error) {
-      setOrderCheckError((error as Error).message);
-    }
   };
 
   useEffect(() => {
     setOrder(JSON.stringify(ORDER, null, 2));
-    setOrderCheck(JSON.stringify(ORDER_CHECKS, null, 2));
   }, []);
 
   const toggleShowInfo = () => setShowInfo((prev) => !prev);
@@ -51,12 +40,6 @@ function App() {
           error={orderError}
           onChange={setOrder}
         />
-        <JsonEditor
-          label="Order Check Input"
-          value={orderCheck}
-          error={orderCheckError}
-          onChange={setOrderCheck}
-        />
         <div className="w-full flex space-x-4 mt-4">
           <Button onClick={handleUpdate}>Update</Button>
           <Button onClick={toggleShowInfo}>
@@ -65,17 +48,14 @@ function App() {
         </div>
       </div>
 
-      <div className="w-[50%] p-4 bg-white">
-        {parsedOrder &&
-          parsedOrderChecks &&
-          !orderError &&
-          !orderCheckError && (
-            <>
-              {parsedOrderChecks.checks?.map((check) => (
-                <div key={check.id}>
-                  <h5 className="text-xl font-bold  my-4">
-                    ORDER CHECK ({check.id})
-                  </h5>
+      <div className="w-[50%] max-h-[100vh] p-4 bg-white overflow-y-auto">
+        {parsedOrder && !orderError && (
+          <>
+            {parsedOrder.checks?.map((check) => (
+              <div key={check.id}>
+                <h5 className="text-xl font-bold  my-4">
+                  ORDER CHECK ({check.id})
+                </h5>
                   <OrderCheckItem
                     order={parsedOrder}
                     orderCheck={check}
@@ -91,7 +71,6 @@ function App() {
               ))}
               <OrderChecksSummary
                 order={parsedOrder}
-                orderChecks={parsedOrderChecks.checks}
               />
             </>
           )}

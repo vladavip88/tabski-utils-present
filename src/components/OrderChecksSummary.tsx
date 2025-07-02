@@ -9,13 +9,13 @@ import {
 
 interface OrderChecksSummaryProps {
   order: any;
-  orderChecks: any[];
 }
 
 const OrderChecksSummary: React.FC<OrderChecksSummaryProps> = ({
   order,
-  orderChecks,
 }) => {
+  console.log(order)
+  console.log(calculateOrderChecksSubtotalPriceUI({ order }))
   return (
     <div>
       <hr className="border-gray-800 border-2 mb-4" />
@@ -23,19 +23,19 @@ const OrderChecksSummary: React.FC<OrderChecksSummaryProps> = ({
         <ListItem label="ORDER CHECKS INFO" />
         <ListItem
           label="Order Checks Subtotal"
-          value={calculateOrderChecksSubtotalPriceUI({ orderChecks, order })}
+          value={calculateOrderChecksSubtotalPriceUI({ order })}
         />
         <ListItem
           label="Order Checks Total Discounts"
-          value={calculateOrderChecksTotalDiscountsUI({ orderChecks, order })}
+          value={calculateOrderChecksTotalDiscountsUI({ order  })}
         />
         <ListItem
           label="Order Checks Total Taxes"
-          value={calculateOrderChecksTotalTaxesUI({ orderChecks, order })}
+          value={calculateOrderChecksTotalTaxesUI({ order  })}
         />
         <ListItem
           label="Order Checks Total"
-          value={calculateOrderChecksTotalPriceUI({ orderChecks, order })}
+          value={calculateOrderChecksTotalPriceUI({ order  })}
         />
       </ul>
     </div>
