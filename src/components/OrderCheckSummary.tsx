@@ -12,6 +12,8 @@ import {
   calculateOrderCheckTipUi,
 } from "@tabski-organization/tabski-utils";
 
+import { calculateRefund } from '../customCalcs';
+
 interface OrderCheckSummaryProps {
   order: any;
   orderCheck: any;
@@ -24,6 +26,7 @@ const OrderCheckSummary: React.FC<OrderCheckSummaryProps> = ({
   showInfo,
 }) => {
   const [tip, setTip] = React.useState<number>(0);
+  const [refunds, setRefunds] = React.useState<{id: string, amount: number }[]>([{id: '', amount: 0}]);
 
   const handleTipChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
@@ -127,6 +130,35 @@ const OrderCheckSummary: React.FC<OrderCheckSummaryProps> = ({
               })}
               info
             />
+            {refunds.map((refund, index) => (
+              <>
+              <input 
+                type="text" 
+                value={refund.id} 
+                onChange={(e) => setRefunds(refunds.map((r, i) => i === index ? {...r, id: e.target.value} : r))} 
+                placeholder="Refund ID" 
+                className="w-full p-2 border border-gray-300 rounded mb-2"
+              />  
+              <input 
+                type="number" 
+                value={refund.amount} 
+                onChange={(e) => setRefunds(refunds.map((r, i) => i === index ? {...r, amount: parseFloat(e.target.value)} : r))} 
+                placeholder="Refund Amount" 
+                className="w-full p-2 border border-gray-300 rounded mb-2"
+              />
+              </>
+            ))}
+            {refunds.map((item: any) => item.amount && item.id && (
+              <ListItem
+              label="REFUNDS"
+              value={calculateRefund({
+                order,
+                orderCheck,
+                orderCheckItemId: item.id,
+                orderCheckItemAmount: item.amount,
+              })}
+              />
+            ))}
           </>
         )}
       </ul>

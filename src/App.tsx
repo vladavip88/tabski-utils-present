@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { ORDER, ORDER_CHECKS } from "./mockData";
+import { ORDER } from "./mockData";
 
 import JsonEditor from "./components/JsonEditor";
 import Button from "./components/Button";

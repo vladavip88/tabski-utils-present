@@ -36,7 +36,7 @@ export const ORDER = {
       ],
       items: [
         {
-          amount: 1,
+          amount: 1.5,
           discounts: [],
           orderItemId: "68418150999ab37d8186d6d4",
           refundAmount: 0,
