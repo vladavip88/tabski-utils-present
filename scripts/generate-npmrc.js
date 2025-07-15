@@ -1,4 +1,5 @@
-const fs = require('fs');
+// scripts/generate-npmrc.mjs
+import { writeFile } from 'fs/promises';
 
 const npmrcContent = `\
 # Default registry for public npm packages
@@ -9,5 +10,5 @@ registry=https://registry.npmjs.org/
 //npm.pkg.github.com/:_authToken=${process.env.GH_TOKEN}
 `;
 
-fs.writeFileSync('.npmrc', npmrcContent);
+await writeFile('.npmrc', npmrcContent);
 console.log('.npmrc file written for Vercel build');
