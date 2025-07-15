@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "vercel-build": "node scripts/generate-npmrc.js && npm run build && rm .npmrc",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tabski-organization/tabski-utils": "^1.0.81",
+    "@tabski-organization/tabski-utils": "^1.0.83",
     "@tailwindcss/vite": "^4.1.8",
     "prismjs": "^1.30.0",
     "react": "^19.1.0",
