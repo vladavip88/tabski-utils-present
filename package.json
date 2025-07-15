@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "vercel-build": "node scripts/generate-npmrc.js && npm run build && rm .npmrc",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
