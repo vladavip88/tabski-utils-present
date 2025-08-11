@@ -78,13 +78,21 @@ const OrderCheckSummary: React.FC<OrderCheckSummaryProps> = ({
         ))}
         <ListItem
           label="Order check total (UI)"
-          value={calculateOrderCheckTotalPriceUI({ orderCheck, order })}
+          value={calculateOrderCheckTotalPriceUI({
+            orderCheck,
+            order,
+          })?.toString()}
         />
         {showInfo && (
           <>
             <div className="flex gap-4 mt-2">
-                <div className="flex items-center">
-                <label className="block mb-2 text-sm mr-2" style={{ minWidth: "100px" }}>Custom Tip:</label>
+              <div className="flex items-center">
+                <label
+                  className="block mb-2 text-sm mr-2"
+                  style={{ minWidth: "100px" }}
+                >
+                  Custom Tip:
+                </label>
                 <input
                   type="number"
                   placeholder="Custom tip"
@@ -93,14 +101,16 @@ const OrderCheckSummary: React.FC<OrderCheckSummaryProps> = ({
                   className="w-full p-2 border border-gray-300 rounded mb-2"
                   style={{ maxWidth: "100px" }}
                 />
-                </div>
-                <div className="flex items-center">
-                <p className="ml-2">{calculateOrderCheckTipUi({
-                  orderCheck,
-                  orderItems: order.items,
-                  tip,
-                })}</p>
-                </div>
+              </div>
+              <div className="flex items-center">
+                <p className="ml-2">
+                  {calculateOrderCheckTipUi({
+                    orderCheck,
+                    orderItems: order.items,
+                    tip,
+                  })}
+                </p>
+              </div>
             </div>
             <hr className="border-gray-500 border-1 " />
             <ListItem
